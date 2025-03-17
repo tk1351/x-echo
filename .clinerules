@@ -1,0 +1,282 @@
+# Cline Rules
+
+## Role Definition
+
+I am a full-stack engineer proficient in using Hono.
+
+## Technology Stack
+
+- Backend (under api directory)
+  - hono
+  - zod
+  - typescript
+  - prisma
+  - biome
+- Frontend (under client directory)
+  - To be constructed in the future
+- Database
+  - postgresql
+  - docker
+- Others
+  - npm
+
+## Application Description
+
+This application is a clone app modeled after X (formerly Twitter). Users can log in and post their tweets.
+Users can follow other users, and the tweets of followed users will be displayed in the timeline.
+Users can favorite or retweet other users' tweets.
+
+The postgres container described in compose.yaml is used as the database.
+We connect to the postgres container using prisma and write the api to return data according to the routing set up in the backend.
+Requests are sent from the frontend to this api and rendered in the browser. (The frontend will be built in the future)
+
+### How to Start the Project
+
+1. Run npm run dev in the api directory
+2. Access http://localhost:8080
+
+## Expected Response
+
+- Think in English, and respond in detail in Japanese
+
+## Coding Standards
+
+- Functional Approach
+  - Prioritize pure functions
+  - Use immutable data structures
+  - Separate side effects
+  - Ensure type safety
+- Typescript
+  - Use specific types
+    - Avoid using any
+    - Use unknown and then narrow down the type
+    - Utilize Utility Types
+  - Give meaningful names
+  - Clarify the meaning of types
+- Test-Driven Development
+  - Red-Green-Refactor cycle
+  - Treat tests as specifications
+  - Iterate in small units
+  - Continuous refactoring
+- Comply with standard rules of Biome, ESLint, and Prettier
+
+## Implementation Patterns
+
+### Result Type
+
+```typescript
+type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };
+```
+
+- Explicitly indicate success/failure
+- Use early return pattern
+- Define error types
+
+### Type Definitions
+
+```typescript
+type Branded<T, B> = T & { _brand: B };
+type Money = Branded<number, "Money">;
+type Email = Branded<string, "Email">;
+```
+
+- Ensure type safety with branded types
+
+## Code Style
+
+- Function-first (classes only when necessary)
+- Utilize immutable update patterns
+- Flatten conditional branches with early returns
+- Define enums for errors and use cases
+
+## Testing Standards
+
+### Common
+
+- Do not create __tests__ directory
+- Create in the same directory as the file to be tested
+- Standardize file names with .test.ts
+- When creating a new test file
+  - Refer to the style of existing test code
+    - When working in the api directory, refer to test code in the api directory
+    - When working in the client directory, refer to test code in the client directory
+  - If the same mock appears in multiple files and can be reused, extract it to a separate file
+- Prioritize unit tests for pure functions
+- Incorporate testability into the design
+- Use assert-first to work backward from the expected result
+- If tests continue to fail, report the problem to the user and seek instructions
+
+### api Directory
+
+- Mock parts using Prisma so they don't access the actual database
+- Mock parts dependent on external APIs so they don't generate actual requests
+- Execute the command "npm run test {target file}"
+
+## Directory Structure Rules
+
+```
+docs/ # Documentation repository
+api/  # api
+client/ # Frontend
+```
+
+## Basic Test-Driven Development (TDD)
+
+### Basic Concepts
+
+Test-Driven Development (TDD) is a development methodology that proceeds in the following cycle:
+
+1. **Red**: First, write a test that fails
+2. **Green**: Implement the minimal code to make the test pass
+3. **Refactor**: Improve the code through refactoring
+
+### Important Principles
+- **Tests are specifications**: Test code represents the specifications of the implementation
+- **Think in Assert-Act-Arrange order**:
+  1. First define the expected result (assertion)
+  2. Then define the operation (the process under test)
+  3. Finally define the preparation (setting up the test environment)
+- **Test names in the format "situation → operation → result"**: Example:
+  "Should successfully retrieve user information when given a valid token"
+
+## Commit Message Conventions
+
+### 1. Basic Structure
+
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+
+# Prompt History
+<prompt_history>
+
+### 2. Explanation of Each Element
+
+#### type
+
+- feature: New feature
+- fix: Bug fix
+- docs: Changes to documentation only
+- style: Changes that do not affect the meaning of the code (whitespace, formatting, adding semicolons, etc.)
+- refactor: Code changes that neither fix a bug nor add a feature
+- test: Adding or modifying tests
+- chore: Changes to build processes or auxiliary tools and libraries
+
+#### scope
+
+- Indicates the scope of impact of the change
+- Separate with commas if there are multiple scopes
+- Can be omitted for general changes
+
+#### subject
+
+- Briefly summarize the change
+
+#### body
+
+- Detailed explanation of the change
+- Can be described in multiple lines with line breaks
+- Explanation of why the change was necessary
+- Line break at 72 characters
+
+#### prompt_history
+
+- Record of prompts instructed by the user
+- Include additional contextual information related to the prompts
+
+### 3. Example of a Commit Message
+
+feature(tweets): Add tweet posting functionality
+
+- Implement tweet posting feature
+- Add validation for posting
+
+# Prompt History
+
+1. Q: Please implement the tweet posting feature
+   A: Implemented tweet posting feature and added validation for posting conditions
+
+### 4. Limitations on Commit Message Commands
+
+- When creating a commit message, do not execute commands
+- Provide only the content of the created message as a response
+- Command execution must always be done manually by the user
+
+### 5. Steps for Creating a Commit Message
+
+1. Perform verification after code changes
+  - Ensure there are no code compilation errors
+  - Ensure tests for changed files are successful
+
+2. Create message content for commit_message.txt file
+  - Write the message following the basic structure above
+  - Always include prompt history
+  - Appropriately summarize the changes
+
+3. Provide only the content of the created message as a response
+  - Do not execute commands
+  - User will execute commit manually
+
+### 6. Notes
+
+- Include only one logical change in one commit
+- Divide into multiple commits if there are multiple changes
+- Commit messages can be written in Japanese
+- Always include prompt history for change traceability
+- Use commit_message.txt as a temporary file
+
+## Pull Request Creation Conventions
+
+### 1. Basic Rules
+
+- Base branch is fixed to main
+- Title and body are written in Japanese
+
+### 2. Creating Title & Body
+
+#### Title
+- Concisely summarize the commit content included in the branch
+- Format: `Commit type: Summary of changes`
+- Example: `feature: Add document review approval function`
+
+#### Body
+- Extract main changes from commit history and describe in list format
+- Include the background and purpose of the changes
+- Include test execution results and operation verification results
+
+### 3. Limitations on Pull Request Commands
+
+- When creating a pull request command, do not execute the command
+- Provide only the content of the created command as a response
+- Command execution must always be done manually by the user
+
+### 4. Using the gh Command
+
+# Get current branch name
+current_branch=$(git branch --show-current)
+
+# Pull request creation command
+gh pr create \
+  --base main \
+  --head "$current_branch" \
+  --title "[Commit type] Summary of changes" \
+  --body "## Changes
+
+- Change 1
+- Change 2
+- Change 3
+
+## Background & Purpose of Changes
+- Explanation of background
+- Explanation of purpose
+
+## Test Results
+- [ ] Unit tests executed
+- [ ] Operation verified
+
+### 4. Notes When Requesting Reviews
+
+- Clearly state points that need special attention
+- Add supplementary explanations for complex parts of the code

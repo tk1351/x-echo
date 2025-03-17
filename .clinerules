@@ -2,7 +2,7 @@
 
 ## Role Definition
 
-I am a full-stack engineer proficient in using Hono.
+Full-stack engineer proficient in using Hono.
 
 ## Technology Stack
 
@@ -13,7 +13,7 @@ I am a full-stack engineer proficient in using Hono.
   - prisma
   - biome
 - Frontend (under client directory)
-  - To be constructed in the future
+  - To be built in the future
 - Database
   - postgresql
   - docker
@@ -22,43 +22,44 @@ I am a full-stack engineer proficient in using Hono.
 
 ## Application Description
 
-This application is a clone app modeled after X (formerly Twitter). Users can log in and post their tweets.
-Users can follow other users, and the tweets of followed users will be displayed in the timeline.
-Users can favorite or retweet other users' tweets.
+This application is a clone of X (formerly Twitter). Users can log in and post their tweets.
+Users can follow other users, and tweets from followed users will appear in their timeline.
+Users can favorite and retweet other users' tweets.
 
-The postgres container described in compose.yaml is used as the database.
-We connect to the postgres container using prisma and write the api to return data according to the routing set up in the backend.
-Requests are sent from the frontend to this api and rendered in the browser. (The frontend will be built in the future)
+We use the postgres container described in compose.yaml as the database.
+We connect to that postgres container with prisma, and write an API that returns data according to the routing configured in the backend.
+The frontend sends requests to that API and renders in the browser. (The frontend will be built in the future)
 
-### How to Start the Project
+### How to Launch the Project
 
 1. Run npm run dev in the api directory
 2. Access http://localhost:8080
 
 ## Expected Response
 
-- Think in English, and respond in detail in Japanese
+- Think in English, respond in detail in Japanese
 
 ## Coding Standards
 
 - Functional Approach
   - Prioritize pure functions
   - Use immutable data structures
-  - Separate side effects
+  - Isolate side effects
   - Ensure type safety
 - Typescript
   - Use specific types
     - Avoid using any
-    - Use unknown and then narrow down the type
+    - Use unknown and then narrow down types
     - Utilize Utility Types
-  - Give meaningful names
+  - Use meaningful names
   - Clarify the meaning of types
 - Test-Driven Development
   - Red-Green-Refactor cycle
   - Treat tests as specifications
   - Iterate in small units
   - Continuous refactoring
-- Comply with standard rules of Biome, ESLint, and Prettier
+- Adhere to standard rules of Biome, ESLint, Prettier
+  - Run `npm run check` in the api directory
 
 ## Implementation Patterns
 
@@ -93,69 +94,70 @@ type Email = Branded<string, "Email">;
 
 ### Common
 
-- Do not create __tests__ directory
-- Create in the same directory as the file to be tested
-- Standardize file names with .test.ts
+- Do not create __tests__ directories
+- Create in the same directory as the target file
+- Unify file names with .test.ts
 - When creating a new test file
   - Refer to the style of existing test code
     - When working in the api directory, refer to test code in the api directory
     - When working in the client directory, refer to test code in the client directory
   - If the same mock appears in multiple files and can be reused, extract it to a separate file
-- Prioritize unit tests for pure functions
-- Incorporate testability into the design
-- Use assert-first to work backward from the expected result
-- If tests continue to fail, report the problem to the user and seek instructions
+- Prioritize unit testing of pure functions
+- Incorporate testability into design
+- Use assert-first to work backward from expected results
+- If tests continue to fail, report the problem to the user and ask for instructions
 
-### api Directory
+### api directory
 
-- Mock parts using Prisma so they don't access the actual database
-- Mock parts dependent on external APIs so they don't generate actual requests
-- Execute the command "npm run test {target file}"
+- Mock parts using Prisma so that they don't access the actual database
+- Mock parts dependent on external APIs so that actual requests do not occur
+- Run the command "npm run test {target file}"
 
 ## Directory Structure Rules
 
 ```
-docs/ # Documentation repository
-api/  # api
+docs/ # Documentation location
+api/  # API
 client/ # Frontend
 ```
 
-## Basic Test-Driven Development (TDD)
+## Test-Driven Development (TDD) Basics
 
 ### Basic Concepts
 
-Test-Driven Development (TDD) is a development methodology that proceeds in the following cycle:
+Test-Driven Development (TDD) is a development approach that proceeds through the following cycle:
 
-1. **Red**: First, write a test that fails
-2. **Green**: Implement the minimal code to make the test pass
+1. **Red**: First, write a failing test
+2. **Green**: Implement minimally to make the test pass
 3. **Refactor**: Improve the code through refactoring
 
-### Important Principles
-- **Tests are specifications**: Test code represents the specifications of the implementation
+### Key Concepts
+
+- **Tests are specifications**: Test code expresses the specifications of the implementation
 - **Think in Assert-Act-Arrange order**:
   1. First define the expected result (assertion)
-  2. Then define the operation (the process under test)
-  3. Finally define the preparation (setting up the test environment)
-- **Test names in the format "situation → operation → result"**: Example:
+  2. Then define the operation (processing of the test target)
+  3. Finally define the preparation (setup of the test environment)
+- **Test names should be in "situation→operation→result" format**: Example:
   "Should successfully retrieve user information when given a valid token"
 
 ## Branch Strategy
 
 ### 1. Basic Rules
 
-- Development must always be done in feature branches
-- The main branch must maintain a stable state at all times
-- Feature implementations and bug fixes should be done in separate branches
+- Always develop on feature branches
+- Keep the main branch in a stable state
+- Implement features and fix bugs on separate branches
 
 ### 2. Branch Naming Conventions
 
-- Feature additions: `feature/feature-name`
+- Feature addition: `feature/feature-name`
 - Bug fixes: `fix/bug-description`
 - Refactoring: `refactor/description`
 - Documentation: `docs/description`
 - Configuration changes: `chore/description`
 
-### 3. Work Initiation Procedure
+### 3. Work Start Procedure
 
 1. Create a new branch from the latest main branch
    ```bash
@@ -177,27 +179,27 @@ Test-Driven Development (TDD) is a development methodology that proceeds in the 
 # Prompt History
 <prompt_history>
 
-### 2. Explanation of Each Element
+### 2. Description of Elements
 
 #### type
 
 - feature: New feature
 - fix: Bug fix
-- docs: Changes to documentation only
-- style: Changes that do not affect the meaning of the code (whitespace, formatting, adding semicolons, etc.)
-- refactor: Code changes that neither fix a bug nor add a feature
-- test: Adding or modifying tests
+- docs: Documentation only changes
+- style: Changes that don't affect code meaning (whitespace, formatting, adding semicolons, etc.)
+- refactor: Code changes that neither fix bugs nor add features
+- test: Adding or correcting tests
 - chore: Changes to build processes or auxiliary tools and libraries
 
 #### scope
 
-- Indicates the scope of impact of the change
+- Indicates the scope of influence of the change
 - Separate with commas if there are multiple scopes
-- Can be omitted for general changes
+- Optional for global changes
 
 #### subject
 
-- Briefly summarize the change
+- Concise summary of the change
 
 #### body
 
@@ -209,40 +211,40 @@ Test-Driven Development (TDD) is a development methodology that proceeds in the 
 #### prompt_history
 
 - Record of prompts instructed by the user
-- Include additional contextual information related to the prompts
+- Include additional context information related to the prompt
 
-### 3. Example of a Commit Message
+### 3. Commit Message Example
 
 feature(tweets): Add tweet posting functionality
 
-- Implement tweet posting feature
+- Implement tweet posting functionality
 - Add validation for posting
 
 # Prompt History
 
-1. Q: Please implement the tweet posting feature
-   A: Implemented tweet posting feature and added validation for posting conditions
+1. Q: Please implement tweet posting functionality
+  A: Implemented tweet posting functionality and added validation for posting conditions
 
-### 4. Limitations on Commit Message Commands
+### 4. Commit Message Command Restrictions
 
-- When creating a commit message, do not execute commands
-- Provide only the content of the created message as a response
-- Command execution must always be done manually by the user
+- If a commit message is created, do not execute the command
+- Provide only the created message content as the answer
+- Commands must always be executed manually by the user
 
-### 5. Steps for Creating a Commit Message
+### 5. Commit Message Creation Procedure
 
 1. Perform verification after code changes
   - Ensure there are no code compilation errors
-  - Ensure tests for changed files are successful
+  - Ensure tests for changed files succeed
 
-2. Create message content for commit_message.txt file
-  - Write the message following the basic structure above
+2. Create the message content for commit_message.txt file
+  - Write the message according to the basic structure above
   - Always include prompt history
   - Appropriately summarize the changes
 
-3. Provide only the content of the created message as a response
+3. Provide only the created message content as the answer
   - Do not execute commands
-  - User will execute commit manually
+  - The user manually executes the commit
 
 ### 6. Notes
 
@@ -259,7 +261,7 @@ feature(tweets): Add tweet posting functionality
 - Base branch is fixed to main
 - Title and body are written in Japanese
 
-### 2. Creating Title & Body
+### 2. Creating Title and Body
 
 #### Title
 - Concisely summarize the commit content included in the branch
@@ -267,17 +269,17 @@ feature(tweets): Add tweet posting functionality
 - Example: `feature: Add document review approval function`
 
 #### Body
-- Extract main changes from commit history and describe in list format
-- Include the background and purpose of the changes
+- Extract key changes from commit history and describe in list format
+- Include background and purpose of changes
 - Include test execution results and operation verification results
 
-### 3. Limitations on Pull Request Commands
+### 3. Pull Request Command Restrictions
 
-- When creating a pull request command, do not execute the command
-- Provide only the content of the created command as a response
-- Command execution must always be done manually by the user
+- If a pull request command is created, do not execute the command
+- Provide only the created command content as the answer
+- Commands must always be executed manually by the user
 
-### 4. Using the gh Command
+### 4. Using gh Command
 
 # Get current branch name
 current_branch=$(git branch --show-current)
@@ -293,15 +295,17 @@ gh pr create \
 - Change 2
 - Change 3
 
-## Background & Purpose of Changes
+## Background and Purpose of Changes
+
 - Explanation of background
 - Explanation of purpose
 
 ## Test Results
+
 - [ ] Unit tests executed
 - [ ] Operation verified
 
-### 4. Notes When Requesting Reviews
+### 4. Notes When Requesting Review
 
 - Clearly state points that need special attention
 - Add supplementary explanations for complex parts of the code'

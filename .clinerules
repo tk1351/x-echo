@@ -139,6 +139,31 @@ Test-Driven Development (TDD) is a development methodology that proceeds in the 
 - **Test names in the format "situation → operation → result"**: Example:
   "Should successfully retrieve user information when given a valid token"
 
+## Branch Strategy
+
+### 1. Basic Rules
+
+- Development must always be done in feature branches
+- The main branch must maintain a stable state at all times
+- Feature implementations and bug fixes should be done in separate branches
+
+### 2. Branch Naming Conventions
+
+- Feature additions: `feature/feature-name`
+- Bug fixes: `fix/bug-description`
+- Refactoring: `refactor/description`
+- Documentation: `docs/description`
+- Configuration changes: `chore/description`
+
+### 3. Work Initiation Procedure
+
+1. Create a new branch from the latest main branch
+   ```bash
+   git switch main
+   git pull origin main
+   git switch -c feature/feature-name
+   ```
+
 ## Commit Message Conventions
 
 ### 1. Basic Structure
@@ -262,7 +287,7 @@ gh pr create \
   --base main \
   --head "$current_branch" \
   --title "[Commit type] Summary of changes" \
-  --body "## Changes
+  --body '## Changes
 
 - Change 1
 - Change 2
@@ -279,4 +304,4 @@ gh pr create \
 ### 4. Notes When Requesting Reviews
 
 - Clearly state points that need special attention
-- Add supplementary explanations for complex parts of the code
+- Add supplementary explanations for complex parts of the code'

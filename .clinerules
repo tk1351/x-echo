@@ -39,6 +39,11 @@ The frontend sends requests to that API and renders in the browser. (The fronten
 
 - Think in English, respond in detail in Japanese
 
+## Preparation for Starting Work
+- Check the current git context with `git status`.
+- If there are many changes unrelated to the instructed content, suggest to the user to start as a separate task from the current changes.
+- If you are told to ignore it, proceed as is.
+
 ## Coding Standards
 
 - Functional Approach
@@ -60,6 +65,11 @@ The frontend sends requests to that API and renders in the browser. (The fronten
   - Continuous refactoring
 - Adhere to standard rules of Biome, ESLint, Prettier
   - Run `npm run check` in the api directory
+- Domain-Driven Design (DDD)
+  - Distinguish between Value Objects and Entities
+  - Ensure consistency through Aggregates
+  - Abstract data access with Repositories
+  - Be conscious of Bounded Contexts
 
 ## Implementation Patterns
 
@@ -82,6 +92,24 @@ type Email = Branded<string, "Email">;
 ```
 
 - Ensure type safety with branded types
+
+### Entity
+
+- Identity based on ID
+- Controlled updates
+- Has consistency rules
+
+### Repository
+
+- Handles only domain models
+- Hides persistence details
+- Provides in-memory implementation for testing
+
+### Adapter Pattern
+
+- Abstracts external dependencies
+- Interface defined by the caller
+- Easily replaceable during testing
 
 ## Code Style
 

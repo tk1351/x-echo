@@ -1,9 +1,10 @@
 import type { Context } from "hono";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import * as authService from "../services/authService.js";
-import type { TokenPair } from "../types/auth.js";
-import { AuthErrorType } from "../utils/errors.js";
-import { login, logout, refresh } from "./authController.js";
+import * as userRepository from "../domain/user/userRepository.js";
+import type { TokenPair, JwtPayload } from "../types/auth.js";
+import { AuthErrorType, UserErrorType } from "../utils/errors.js";
+import { login, logout, refresh, me } from "./authController.js";
 
 // Prismaクライアントのモック
 vi.mock("../lib/prisma.js", () => ({
@@ -284,6 +285,144 @@ describe("authController", () => {
 					message: "トークンのブラックリスト登録中にエラーが発生しました",
 				},
 			});
+		});
+	});
+
+	describe("me", () => {
+		it("認証済みユーザーの情報を正常に取得できること", async () => {
+			// Arrange
+			const mockContext = createMockContext() as any;
+			const mockPayload: JwtPayload = {
+				userId: 1,
+				username: "testuser",
+				role: "USER",
+			};
+
+			// 認証ミドルウェアで設定されたJWTペイロード
+			mockContext.get = vi.fn().mockReturnValue(mockPayload);
+
+			// ユーザー情報の取得
+			const mockUser = {
+				id: 1,
+				username: "testuser",
+				displayName: "Test User",
+				email: "test@example.com",
+				passwordHash: "hashed_password",
+				bio: null,
+				profileImageUrl: null,
+				headerImageUrl: null,
+				followersCount: 0,
+				followingCount: 0,
+				isVerified: false,
+				isActive: true,
+				role: "USER",
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			};
+
+			vi.spyOn(userRepository, "findUserById").mockResolvedValueOnce({
+				ok: true,
+				value: mockUser,
+			});
+
+			// Act
+			await me(mockContext);
+
+			// Assert
+			expect(mockContext.get).toHaveBeenCalledWith("jwtPayload");
+			expect(userRepository.findUserById).toHaveBeenCalledWith(
+				mockPayload.userId,
+				expect.anything(),
+			);
+			expect(mockContext.json).toHaveBeenCalledWith(
+				{
+					user: {
+						id: mockUser.id,
+						username: mockUser.username,
+						displayName: mockUser.displayName,
+						email: mockUser.email,
+						bio: mockUser.bio,
+						profileImageUrl: mockUser.profileImageUrl,
+						headerImageUrl: mockUser.headerImageUrl,
+						followersCount: mockUser.followersCount,
+						followingCount: mockUser.followingCount,
+						isVerified: mockUser.isVerified,
+						isActive: mockUser.isActive,
+						role: mockUser.role,
+						createdAt: mockUser.createdAt,
+						updatedAt: mockUser.updatedAt,
+					},
+				},
+				200,
+			);
+		});
+
+		it("ユーザーが見つからない場合エラーレスポンスを返すこと", async () => {
+			// Arrange
+			const mockContext = createMockContext() as any;
+			const mockPayload: JwtPayload = {
+				userId: 999, // 存在しないユーザーID
+				username: "nonexistent",
+				role: "USER",
+			};
+
+			// 認証ミドルウェアで設定されたJWTペイロード
+			mockContext.get = vi.fn().mockReturnValue(mockPayload);
+
+			// ユーザーが見つからない
+			vi.spyOn(userRepository, "findUserById").mockResolvedValueOnce({
+				ok: false,
+				error: {
+					type: UserErrorType.USER_NOT_FOUND,
+					message: "ユーザーが見つかりません",
+				},
+			});
+
+			// Act
+			await me(mockContext);
+
+			// Assert
+			expect(mockContext.json).toHaveBeenCalledWith(
+				{
+					error: {
+						type: UserErrorType.USER_NOT_FOUND,
+						message: "ユーザーが見つかりません",
+					},
+				},
+				404,
+			);
+		});
+
+		it("予期しないエラーが発生した場合エラーレスポンスを返すこと", async () => {
+			// Arrange
+			const mockContext = createMockContext() as any;
+			const mockPayload: JwtPayload = {
+				userId: 1,
+				username: "testuser",
+				role: "USER",
+			};
+
+			// 認証ミドルウェアで設定されたJWTペイロード
+			mockContext.get = vi.fn().mockReturnValue(mockPayload);
+
+			// 予期しないエラーを発生させる
+			vi.spyOn(userRepository, "findUserById").mockRejectedValueOnce(
+				new Error("Database connection error"),
+			);
+
+			// Act
+			await me(mockContext);
+
+			// Assert
+			expect(mockContext.json).toHaveBeenCalledWith(
+				{
+					error: {
+						type: "INTERNAL_ERROR",
+						message: "内部サーバーエラーが発生しました",
+					},
+				},
+				500,
+			);
 		});
 	});
 });

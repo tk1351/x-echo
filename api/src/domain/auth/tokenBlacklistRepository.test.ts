@@ -26,7 +26,7 @@ describe("tokenBlacklistRepository", () => {
 			// Arrange
 			const token = "test.jwt.token";
 			const expiresAt = new Date();
-			mockPrisma.tokenBlacklist.create.mockResolvedValueOnce({
+			(mockPrisma.tokenBlacklist.create as any).mockResolvedValueOnce({
 				id: 1,
 				token,
 				expiresAt,
@@ -50,7 +50,7 @@ describe("tokenBlacklistRepository", () => {
 			// Arrange
 			const token = "test.jwt.token";
 			const expiresAt = new Date();
-			mockPrisma.tokenBlacklist.create.mockRejectedValueOnce(
+			(mockPrisma.tokenBlacklist.create as any).mockRejectedValueOnce(
 				new Error("Database error"),
 			);
 
@@ -59,7 +59,9 @@ describe("tokenBlacklistRepository", () => {
 
 			// Assert
 			expect(result.ok).toBe(false);
-			expect(result.error?.type).toBe(AuthErrorType.INTERNAL_ERROR);
+			if (!result.ok) {
+				expect(result.error.type).toBe(AuthErrorType.INTERNAL_ERROR);
+			}
 		});
 	});
 
@@ -67,7 +69,7 @@ describe("tokenBlacklistRepository", () => {
 		it("ブラックリストに存在するトークンの場合trueを返すこと", async () => {
 			// Arrange
 			const token = "blacklisted.jwt.token";
-			mockPrisma.tokenBlacklist.findUnique.mockResolvedValueOnce({
+			(mockPrisma.tokenBlacklist.findUnique as any).mockResolvedValueOnce({
 				id: 1,
 				token,
 				expiresAt: new Date(),
@@ -79,7 +81,9 @@ describe("tokenBlacklistRepository", () => {
 
 			// Assert
 			expect(result.ok).toBe(true);
-			expect(result.value).toBe(true);
+			if (result.ok) {
+				expect(result.value).toBe(true);
+			}
 			expect(mockPrisma.tokenBlacklist.findUnique).toHaveBeenCalledWith({
 				where: { token },
 			});
@@ -88,20 +92,22 @@ describe("tokenBlacklistRepository", () => {
 		it("ブラックリストに存在しないトークンの場合falseを返すこと", async () => {
 			// Arrange
 			const token = "valid.jwt.token";
-			mockPrisma.tokenBlacklist.findUnique.mockResolvedValueOnce(null);
+			(mockPrisma.tokenBlacklist.findUnique as any).mockResolvedValueOnce(null);
 
 			// Act
 			const result = await isTokenBlacklisted(token, mockPrisma);
 
 			// Assert
 			expect(result.ok).toBe(true);
-			expect(result.value).toBe(false);
+			if (result.ok) {
+				expect(result.value).toBe(false);
+			}
 		});
 
 		it("データベースエラー時に適切なエラーを返すこと", async () => {
 			// Arrange
 			const token = "test.jwt.token";
-			mockPrisma.tokenBlacklist.findUnique.mockRejectedValueOnce(
+			(mockPrisma.tokenBlacklist.findUnique as any).mockRejectedValueOnce(
 				new Error("Database error"),
 			);
 
@@ -110,14 +116,16 @@ describe("tokenBlacklistRepository", () => {
 
 			// Assert
 			expect(result.ok).toBe(false);
-			expect(result.error?.type).toBe(AuthErrorType.INTERNAL_ERROR);
+			if (!result.ok) {
+				expect(result.error.type).toBe(AuthErrorType.INTERNAL_ERROR);
+			}
 		});
 	});
 
 	describe("removeExpiredTokens", () => {
 		it("期限切れのトークンを正常に削除し、削除数を返すこと", async () => {
 			// Arrange
-			mockPrisma.tokenBlacklist.deleteMany.mockResolvedValueOnce({
+			(mockPrisma.tokenBlacklist.deleteMany as any).mockResolvedValueOnce({
 				count: 5,
 			});
 
@@ -126,7 +134,9 @@ describe("tokenBlacklistRepository", () => {
 
 			// Assert
 			expect(result.ok).toBe(true);
-			expect(result.value).toBe(5);
+			if (result.ok) {
+				expect(result.value).toBe(5);
+			}
 			expect(mockPrisma.tokenBlacklist.deleteMany).toHaveBeenCalledWith({
 				where: {
 					expiresAt: {
@@ -138,7 +148,7 @@ describe("tokenBlacklistRepository", () => {
 
 		it("データベースエラー時に適切なエラーを返すこと", async () => {
 			// Arrange
-			mockPrisma.tokenBlacklist.deleteMany.mockRejectedValueOnce(
+			(mockPrisma.tokenBlacklist.deleteMany as any).mockRejectedValueOnce(
 				new Error("Database error"),
 			);
 
@@ -147,7 +157,9 @@ describe("tokenBlacklistRepository", () => {
 
 			// Assert
 			expect(result.ok).toBe(false);
-			expect(result.error?.type).toBe(AuthErrorType.INTERNAL_ERROR);
+			if (!result.ok) {
+				expect(result.error.type).toBe(AuthErrorType.INTERNAL_ERROR);
+			}
 		});
 	});
 });

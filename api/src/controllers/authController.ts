@@ -1,7 +1,8 @@
 import type { Context } from "hono";
 import { ValidationErrorType } from "../utils/errors.js";
 import * as authService from "../services/authService.js";
-import type { LoginCredentials } from "../types/auth.js";
+import * as userRepository from "../domain/user/userRepository.js";
+import type { LoginCredentials, JwtPayload } from "../types/auth.js";
 import prisma from "../lib/prisma.js";
 
 // ログイン処理
@@ -95,6 +96,35 @@ export const logout = async (c: Context) => {
 	} catch (error) {
 		// 予期しないエラー
 		console.error("Logout error:", error);
+		return c.json({
+			error: {
+				type: "INTERNAL_ERROR",
+				message: "内部サーバーエラーが発生しました",
+			},
+		}, 500);
+	}
+};
+
+// 現在のユーザー情報取得処理
+export const me = async (c: Context) => {
+	try {
+		// 認証ミドルウェアで設定されたJWTペイロードを取得
+		const payload = c.get("jwtPayload") as JwtPayload;
+
+		// ユーザーIDを使用してユーザー情報を取得
+		const userResult = await userRepository.findUserById(payload.userId, prisma);
+
+		if (!userResult.ok) {
+			return c.json({ error: userResult.error }, 404);
+		}
+
+		// パスワードハッシュを除外した安全なユーザー情報を返す
+		const { passwordHash, ...safeUser } = userResult.value;
+
+		return c.json({ user: safeUser }, 200);
+	} catch (error) {
+		// 予期しないエラー
+		console.error("Get current user error:", error);
 		return c.json({
 			error: {
 				type: "INTERNAL_ERROR",

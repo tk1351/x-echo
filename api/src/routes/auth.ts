@@ -1,16 +1,16 @@
 import { Hono } from "hono";
-import { login, refresh, logout } from "../controllers/authController.js";
+import { login, refresh, logout, me } from "../controllers/authController.js";
+import { authenticate } from "../middleware/authMiddleware.js";
 
 // 認証関連のルーターを作成
 const auth = new Hono();
 
-// ログインエンドポイント
+// 認証不要のエンドポイント
 auth.post("/login", login);
-
-// トークン更新エンドポイント
 auth.post("/refresh", refresh);
 
-// ログアウトエンドポイント
-auth.post("/logout", logout);
+// 認証が必要なエンドポイント
+auth.post("/logout", authenticate, logout);
+auth.get("/me", authenticate, me);
 
 export default auth;

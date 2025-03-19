@@ -2,13 +2,13 @@
 
 ## Current Status
 
-The X-Echo project is in the early development phase, with the focus on establishing the foundation for the backend API. The project structure has been set up, and the database schema has been partially defined.
+The X-Echo project is in the early development phase, with the focus on establishing the foundation for the backend API. The project structure has been set up, and the database schema has been partially defined. User registration functionality has been implemented.
 
 ### Project Timeline
 - **Project Start**: Initial setup and planning
-- **Current Phase**: Backend API development - User management
-- **Next Phase**: Authentication and user interactions
-- **Future Phases**: Tweet functionality, social interactions, frontend development
+- **Current Phase**: Backend API development - User management and authentication
+- **Next Phase**: User interactions and tweet functionality
+- **Future Phases**: Social interactions, frontend development
 
 ## What Works
 
@@ -25,6 +25,15 @@ The X-Echo project is in the early development phase, with the focus on establis
 ### API
 - ✅ Basic API server running on port 8080
 - ✅ Hello world endpoint functioning
+- ✅ User registration API implemented
+- ✅ Password hashing with bcrypt
+- ✅ Input validation with Zod
+- ✅ Error handling for registration process
+
+### Testing
+- ✅ Testing infrastructure set up with Vitest
+- ✅ Unit tests for user registration implemented
+- ✅ Test coverage for user service and controller
 
 ### Documentation
 - ✅ Database architecture documentation
@@ -33,21 +42,14 @@ The X-Echo project is in the early development phase, with the focus on establis
 
 ## What's In Progress
 
-### User Management
-- 🔄 User registration API implementation
-- 🔄 Password hashing with bcrypt
-- 🔄 Input validation with Zod
-
-### Testing
-- 🔄 Setting up testing infrastructure
-- 🔄 Writing tests for user registration
+### Authentication
+- 🔄 User login functionality
+- 🔄 JWT token generation and validation
+- 🔄 Protected routes middleware
 
 ## What's Left to Build
 
 ### Authentication
-- ❌ User login functionality
-- ❌ JWT token generation and validation
-- ❌ Protected routes middleware
 - ❌ Password reset functionality
 
 ### User Interactions
@@ -78,7 +80,7 @@ The X-Echo project is in the early development phase, with the focus on establis
 ### Technical Debt
 1. **Error Handling**: Need to implement a consistent error handling strategy across the API
 2. **Validation**: Need to establish standardized validation patterns for all endpoints
-3. **Testing**: Test coverage is currently minimal and needs expansion
+3. **Testing**: Test coverage is currently focused on user registration and needs expansion
 
 ### Blockers
 1. **None currently**: No critical blockers at this stage
@@ -91,7 +93,7 @@ The X-Echo project is in the early development phase, with the focus on establis
 ## Milestones and Targets
 
 ### Milestone 1: User Management (In Progress)
-- User registration
+- ✅ User registration
 - User authentication
 - User profile management
 - Follow functionality
@@ -122,7 +124,7 @@ The X-Echo project is in the early development phase, with the focus on establis
 
 ### Test Coverage
 - Target: > 80% code coverage
-- Current: Not yet measured
+- Current: User registration functionality has good coverage
 
 ### Code Quality
 - Using Biome for linting and formatting

@@ -14,14 +14,16 @@ vi.mock("../lib/prisma.js", () => ({
 
 // モックコンテキスト
 const createMockContext = () => {
+	const mockHeaders: Record<string, string | undefined> = {};
 	const mockContext = {
 		req: {
 			json: vi.fn(),
-			header: vi.fn(),
+			header: (name: string) => mockHeaders[name],
 		},
 		json: vi.fn(),
 		status: vi.fn().mockReturnThis(),
-	} as unknown as Context;
+		headers: mockHeaders, // テスト内でヘッダーを設定するためにアクセスできるようにする
+	} as unknown as Context & { headers: Record<string, string | undefined> };
 
 	return mockContext;
 };
@@ -62,7 +64,7 @@ describe("authController", () => {
 				password: "password123",
 			};
 
-			mockContext.req.json.mockResolvedValueOnce(credentials);
+			vi.mocked(mockContext.req.json).mockResolvedValueOnce(credentials);
 
 			vi.spyOn(authService, "login").mockResolvedValueOnce({
 				ok: true,
@@ -93,7 +95,7 @@ describe("authController", () => {
 				password: "wrongpassword",
 			};
 
-			mockContext.req.json.mockResolvedValueOnce(credentials);
+			vi.mocked(mockContext.req.json).mockResolvedValueOnce(credentials);
 
 			vi.spyOn(authService, "login").mockResolvedValueOnce({
 				ok: false,
@@ -119,7 +121,7 @@ describe("authController", () => {
 		it("リクエストボディが無効な場合エラーレスポンスを返すこと", async () => {
 			// Arrange
 			const mockContext = createMockContext();
-			mockContext.req.json.mockRejectedValueOnce(new Error("Invalid JSON"));
+			vi.mocked(mockContext.req.json).mockRejectedValueOnce(new Error("Invalid JSON"));
 
 			// Act
 			await login(mockContext);
@@ -143,7 +145,7 @@ describe("authController", () => {
 				refreshToken: "valid.refresh.token",
 			};
 
-			mockContext.req.json.mockResolvedValueOnce(refreshTokenRequest);
+			vi.mocked(mockContext.req.json).mockResolvedValueOnce(refreshTokenRequest);
 
 			vi.spyOn(authService, "refreshTokens").mockResolvedValueOnce({
 				ok: true,
@@ -173,7 +175,7 @@ describe("authController", () => {
 				refreshToken: "invalid.refresh.token",
 			};
 
-			mockContext.req.json.mockResolvedValueOnce(refreshTokenRequest);
+			vi.mocked(mockContext.req.json).mockResolvedValueOnce(refreshTokenRequest);
 
 			vi.spyOn(authService, "refreshTokens").mockResolvedValueOnce({
 				ok: false,
@@ -199,7 +201,7 @@ describe("authController", () => {
 		it("リクエストボディが無効な場合エラーレスポンスを返すこと", async () => {
 			// Arrange
 			const mockContext = createMockContext();
-			mockContext.req.json.mockRejectedValueOnce(new Error("Invalid JSON"));
+			vi.mocked(mockContext.req.json).mockRejectedValueOnce(new Error("Invalid JSON"));
 
 			// Act
 			await refresh(mockContext);
@@ -221,7 +223,7 @@ describe("authController", () => {
 			const mockContext = createMockContext();
 			const token = "Bearer valid.access.token";
 
-			mockContext.req.header.mockReturnValueOnce(token);
+			mockContext.headers["Authorization"] = token;
 
 			vi.spyOn(authService, "logout").mockResolvedValueOnce({
 				ok: true,
@@ -245,7 +247,7 @@ describe("authController", () => {
 		it("トークンが提供されていない場合エラーレスポンスを返すこと", async () => {
 			// Arrange
 			const mockContext = createMockContext();
-			mockContext.req.header.mockReturnValueOnce(null);
+			mockContext.headers["Authorization"] = undefined;
 
 			// Act
 			await logout(mockContext);
@@ -265,7 +267,7 @@ describe("authController", () => {
 			const mockContext = createMockContext();
 			const token = "Bearer valid.access.token";
 
-			mockContext.req.header.mockReturnValueOnce(token);
+			mockContext.headers["Authorization"] = token;
 
 			vi.spyOn(authService, "logout").mockResolvedValueOnce({
 				ok: false,

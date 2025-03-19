@@ -33,6 +33,17 @@ model User {
   @@map("users")
 }
 
+model TokenBlacklist {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("token_blacklist")
+  @@index([token])
+  @@index([expiresAt])
+}
+
 enum Role {
   USER
   ADMIN

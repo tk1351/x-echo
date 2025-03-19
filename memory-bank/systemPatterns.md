@@ -218,6 +218,31 @@ erDiagram
 - Parameterized queries via Prisma
 - HTTPS for all communications (production)
 
+## Development Workflow Patterns
+
+### Git Workflow
+```mermaid
+flowchart TD
+    Start[Start Task] --> Status[Check Git Status]
+    Status --> Main[Switch to Main Branch]
+    Main --> Pull[Pull Latest Changes]
+    Pull --> Branch[Create Feature Branch]
+    Branch --> Develop[Develop Feature]
+    Develop --> Commit[Create Commit Message]
+    Commit --> UserCommit[User Commits Changes]
+    UserCommit --> Continue{Continue Development?}
+    Continue -->|Yes| Develop
+    Continue -->|No| PR[Create Pull Request Text]
+    PR --> UserPR[User Creates Pull Request]
+    UserPR --> Complete[Complete Task]
+```
+
+- Always check git status before starting work
+- Always work on feature branches created from the latest main
+- Create commit messages at appropriate times during development
+- Create pull request text before completing work
+- All git commands are executed manually by the user
+
 ## Performance Considerations
 
 ### Query Optimization

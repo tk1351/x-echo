@@ -73,19 +73,6 @@ The current development focus is on implementing the core backend functionality 
    - Optimize database queries
    - Implement caching strategies
 
-## Active Decisions and Considerations
-
-### Architecture Decisions
-
-1. **API Structure**
-   - Using a layered architecture with controllers, services, and repositories
-   - Implementing the Result type pattern for error handling
-   - Utilizing Zod for request validation
-
-2. **Database Design**
-   - Using auto-incrementing integers for primary keys
-   - Implementing counter caching for performance
-   - Planning for efficient indexing strategies
 
 ### Technical Considerations
 

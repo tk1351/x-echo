@@ -130,3 +130,9 @@ The X-Echo project is in the early development phase, with the focus on establis
 - Using Biome for linting and formatting
 - TypeScript for type safety
 - Following established coding standards
+
+### Development Process
+- Enforcing strict git workflow for all development work
+- Requiring branch creation from latest main for all new work
+- Creating commit messages at appropriate times during development
+- Creating pull request text before completing work

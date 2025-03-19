@@ -39,10 +39,6 @@ The frontend sends requests to that API and renders in the browser. (The fronten
 
 - Think in English, respond in detail in Japanese
 
-## Preparation for Starting Work
-- Check the current git context with `git status`.
-- If there are many changes unrelated to the instructed content, suggest to the user to start as a separate task from the current changes.
-- If you are told to ignore it, proceed as is.
 
 ## Coding Standards
 
@@ -185,14 +181,175 @@ Test-Driven Development (TDD) is a development approach that proceeds through th
 - Documentation: `docs/description`
 - Configuration changes: `chore/description`
 
-### 3. Work Start Procedure
+### 3. Work Start Procedure (REQUIRED)
 
-1. Create a new branch from the latest main branch
+1. ALWAYS create a new branch from the latest main branch
    ```bash
    git switch main
    git pull origin main
    git switch -c feature/feature-name
    ```
+
+## Coding Standards
+
+- Functional Approach
+  - Prioritize pure functions
+  - Use immutable data structures
+  - Isolate side effects
+  - Ensure type safety
+- Typescript
+  - Use specific types
+    - Avoid using any
+    - Use unknown and then narrow down types
+    - Utilize Utility Types
+  - Use meaningful names
+  - Clarify the meaning of types
+- Test-Driven Development
+  - Red-Green-Refactor cycle
+  - Treat tests as specifications
+  - Iterate in small units
+  - Continuous refactoring
+- Adhere to standard rules of Biome, ESLint, Prettier
+  - Run `npm run check` in the api directory
+- Domain-Driven Design (DDD)
+  - Distinguish between Value Objects and Entities
+  - Ensure consistency through Aggregates
+  - Abstract data access with Repositories
+  - Be conscious of Bounded Contexts
+
+## Implementation Patterns
+
+### Result Type
+
+```typescript
+type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };
+```
+
+- Explicitly indicate success/failure
+- Use early return pattern
+- Define error types
+
+### Type Definitions
+
+```typescript
+type Branded<T, B> = T & { _brand: B };
+type Money = Branded<number, "Money">;
+type Email = Branded<string, "Email">;
+```
+
+- Ensure type safety with branded types
+
+### Entity
+
+- Identity based on ID
+- Controlled updates
+- Has consistency rules
+
+### Repository
+
+- Handles only domain models
+- Hides persistence details
+- Provides in-memory implementation for testing
+
+### Adapter Pattern
+
+- Abstracts external dependencies
+- Interface defined by the caller
+- Easily replaceable during testing
+
+## Code Style
+
+- Function-first (classes only when necessary)
+- Utilize immutable update patterns
+- Flatten conditional branches with early returns
+- Define enums for errors and use cases
+
+## Testing Standards
+
+### Common
+
+- Do not create __tests__ directories
+- Create in the same directory as the target file
+- Unify file names with .test.ts
+- When creating a new test file
+  - Refer to the style of existing test code
+    - When working in the api directory, refer to test code in the api directory
+    - When working in the client directory, refer to test code in the client directory
+  - If the same mock appears in multiple files and can be reused, extract it to a separate file
+- Prioritize unit testing of pure functions
+- Incorporate testability into design
+- Use assert-first to work backward from expected results
+- If tests continue to fail, report the problem to the user and ask for instructions
+
+### api directory
+
+- Mock parts using Prisma so that they don't access the actual database
+- Mock parts dependent on external APIs so that actual requests do not occur
+- Run the command "npm run test {target file}"
+
+## Directory Structure Rules
+
+```
+docs/ # Documentation location
+api/  # API
+client/ # Frontend
+```
+
+## Test-Driven Development (TDD) Basics
+
+### Basic Concepts
+
+Test-Driven Development (TDD) is a development approach that proceeds through the following cycle:
+
+1. **Red**: First, write a failing test
+2. **Green**: Implement minimally to make the test pass
+3. **Refactor**: Improve the code through refactoring
+
+### Key Concepts
+
+- **Tests are specifications**: Test code expresses the specifications of the implementation
+- **Think in Assert-Act-Arrange order**:
+  1. First define the expected result (assertion)
+  2. Then define the operation (processing of the test target)
+  3. Finally define the preparation (setup of the test environment)
+- **Test names should be in "situation→operation→result" format**: Example:
+  "Should successfully retrieve user information when given a valid token"
+
+## Branch Strategy
+
+### 1. Basic Rules
+
+- Always develop on feature branches
+- Keep the main branch in a stable state
+- Implement features and fix bugs on separate branches
+
+### 2. Branch Naming Conventions
+
+- Feature addition: `feature/feature-name`
+- Bug fixes: `fix/bug-description`
+- Refactoring: `refactor/description`
+- Documentation: `docs/description`
+- Configuration changes: `chore/description`
+
+
+
+### 5. Commit Message Creation Procedure (REQUIRED)
+
+1. Perform verification after code changes
+  - Ensure there are no code compilation errors
+  - Ensure tests for changed files succeed
+
+2. Create the message content for memory_bank_commit_message.txt file
+  - Write the message according to the basic structure above
+  - Always include prompt history
+  - Appropriately summarize the changes
+  - Write commit messages in Japanese
+
+3. Provide only the created message content as the answer
+  - Do not execute commands
+  - Prompt the user to commit with: "Please commit these changes using the message above"
+  - The user manually executes the commit
+  - Wait for confirmation that the commit was successful before continuing
 
 ## Commit Message Conventions
 
@@ -259,20 +416,16 @@ feature(tweets): Add tweet posting functionality
 - Provide only the created message content as the answer
 - Commands must always be executed manually by the user
 
-### 5. Commit Message Creation Procedure
 
-1. Perform verification after code changes
-  - Ensure there are no code compilation errors
-  - Ensure tests for changed files succeed
 
-2. Create the message content for commit_message.txt file
-  - Write the message according to the basic structure above
-  - Always include prompt history
-  - Appropriately summarize the changes
+### 3. Pull Request Command Restrictions (REQUIRED)
 
-3. Provide only the created message content as the answer
-  - Do not execute commands
-  - The user manually executes the commit
+- Before completing any task, ALWAYS create a pull request command
+- Do not execute the command yourself
+- Provide only the created command content as the answer
+- Prompt the user to create the pull request with: "Please create a pull request using the command above"
+- Commands must always be executed manually by the user
+- Wait for confirmation that the pull request was created before marking work as complete
 
 ### 6. Notes
 
@@ -301,11 +454,6 @@ feature(tweets): Add tweet posting functionality
 - Include background and purpose of changes
 - Include test execution results and operation verification results
 
-### 3. Pull Request Command Restrictions
-
-- If a pull request command is created, do not execute the command
-- Provide only the created command content as the answer
-- Commands must always be executed manually by the user
 
 ### 4. Using gh Command
 

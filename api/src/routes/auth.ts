@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { login, refresh, logout, me } from "../controllers/authController.js";
+import { login, logout, me, refresh } from "../controllers/authController.js";
 import { authenticate } from "../middleware/authMiddleware.js";
 
 // 認証関連のルーターを作成

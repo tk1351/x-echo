@@ -1,4 +1,4 @@
-import type { User } from "@prisma/client";
+import type { Role, User } from "@prisma/client";
 
 // ブランド型
 type Branded<T, B> = T & { _brand: B };
@@ -18,7 +18,7 @@ export type LoginCredentials = {
 export type JwtPayload = {
 	userId: number;
 	username: string;
-	role: string;
+	role: Role;
 	iat?: number;
 	exp?: number;
 };

@@ -1,10 +1,11 @@
 import type { Context } from "hono";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import * as authService from "../services/authService.js";
 import * as userRepository from "../domain/user/userRepository.js";
-import type { TokenPair, JwtPayload } from "../types/auth.js";
-import { AuthErrorType, UserErrorType } from "../utils/errors.js";
-import { login, logout, refresh, me } from "./authController.js";
+import * as authService from "../services/authService.js";
+import type { JwtPayload, TokenPair } from "../types/auth.js";
+import { Role } from "@prisma/client";
+import { AuthErrorType, UserErrorType, ValidationErrorType } from "../utils/errors.js";
+import { login, logout, me, refresh } from "./authController.js";
 
 // Prismaクライアントのモック
 vi.mock("../lib/prisma.js", () => ({
@@ -41,7 +42,7 @@ const mockTokenPair: TokenPair = {
 		followingCount: 0,
 		isVerified: false,
 		isActive: true,
-		role: "USER",
+		role: Role.USER,
 		createdAt: new Date(),
 		updatedAt: new Date(),
 	},
@@ -127,7 +128,7 @@ describe("authController", () => {
 			expect(mockContext.status).toHaveBeenCalledWith(400);
 			expect(mockContext.json).toHaveBeenCalledWith({
 				error: {
-					type: "VALIDATION_ERROR",
+					type: ValidationErrorType.INVALID_INPUT,
 					message: "無効なリクエスト形式です",
 				},
 			});
@@ -207,7 +208,7 @@ describe("authController", () => {
 			expect(mockContext.status).toHaveBeenCalledWith(400);
 			expect(mockContext.json).toHaveBeenCalledWith({
 				error: {
-					type: "VALIDATION_ERROR",
+					type: ValidationErrorType.INVALID_INPUT,
 					message: "無効なリクエスト形式です",
 				},
 			});
@@ -295,7 +296,7 @@ describe("authController", () => {
 			const mockPayload: JwtPayload = {
 				userId: 1,
 				username: "testuser",
-				role: "USER",
+				role: Role.USER,
 			};
 
 			// 認証ミドルウェアで設定されたJWTペイロード
@@ -315,7 +316,7 @@ describe("authController", () => {
 				followingCount: 0,
 				isVerified: false,
 				isActive: true,
-				role: "USER",
+				role: Role.USER,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			};
@@ -352,8 +353,7 @@ describe("authController", () => {
 						createdAt: mockUser.createdAt,
 						updatedAt: mockUser.updatedAt,
 					},
-				},
-				200,
+				}
 			);
 		});
 
@@ -363,7 +363,7 @@ describe("authController", () => {
 			const mockPayload: JwtPayload = {
 				userId: 999, // 存在しないユーザーID
 				username: "nonexistent",
-				role: "USER",
+				role: Role.USER,
 			};
 
 			// 認証ミドルウェアで設定されたJWTペイロード
@@ -388,8 +388,7 @@ describe("authController", () => {
 						type: UserErrorType.USER_NOT_FOUND,
 						message: "ユーザーが見つかりません",
 					},
-				},
-				404,
+				}
 			);
 		});
 
@@ -399,7 +398,7 @@ describe("authController", () => {
 			const mockPayload: JwtPayload = {
 				userId: 1,
 				username: "testuser",
-				role: "USER",
+				role: Role.USER,
 			};
 
 			// 認証ミドルウェアで設定されたJWTペイロード
@@ -420,8 +419,7 @@ describe("authController", () => {
 						type: "INTERNAL_ERROR",
 						message: "内部サーバーエラーが発生しました",
 					},
-				},
-				500,
+				}
 			);
 		});
 	});

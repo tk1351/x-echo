@@ -16,23 +16,26 @@ export const login = async (c: Context) => {
 
 		// 結果に応じてレスポンスを返す
 		if (result.ok) {
+			c.status(200);
 			return c.json({
 				accessToken: result.value.accessToken,
 				refreshToken: result.value.refreshToken,
 				user: result.value.user,
-			}, 200);
+			});
 		} else {
-			return c.json({ error: result.error }, 401);
+			c.status(401);
+			return c.json({ error: result.error });
 		}
 	} catch (error) {
 		// リクエストボディのパース失敗など
 		console.error("Login error:", error);
+		c.status(400);
 		return c.json({
 			error: {
 				type: ValidationErrorType.INVALID_INPUT,
 				message: "無効なリクエスト形式です",
 			},
-		}, 400);
+		});
 	}
 };
 
@@ -47,23 +50,26 @@ export const refresh = async (c: Context) => {
 
 		// 結果に応じてレスポンスを返す
 		if (result.ok) {
+			c.status(200);
 			return c.json({
 				accessToken: result.value.accessToken,
 				refreshToken: result.value.refreshToken,
 				user: result.value.user,
-			}, 200);
+			});
 		} else {
-			return c.json({ error: result.error }, 401);
+			c.status(401);
+			return c.json({ error: result.error });
 		}
 	} catch (error) {
 		// リクエストボディのパース失敗など
 		console.error("Token refresh error:", error);
+		c.status(400);
 		return c.json({
 			error: {
 				type: ValidationErrorType.INVALID_INPUT,
 				message: "無効なリクエスト形式です",
 			},
-		}, 400);
+		});
 	}
 };
 
@@ -73,12 +79,13 @@ export const logout = async (c: Context) => {
 		// Authorizationヘッダーからトークンを取得
 		const authHeader = c.req.header("Authorization");
 		if (!authHeader || !authHeader.startsWith("Bearer ")) {
+			c.status(401);
 			return c.json({
 				error: {
 					type: "INVALID_TOKEN",
 					message: "認証トークンが提供されていません",
 				},
-			}, 401);
+			});
 		}
 
 		// "Bearer "プレフィックスを削除してトークンを取得
@@ -89,19 +96,22 @@ export const logout = async (c: Context) => {
 
 		// 結果に応じてレスポンスを返す
 		if (result.ok) {
-			return c.json({ message: "ログアウトしました" }, 200);
+			c.status(200);
+			return c.json({ message: "ログアウトしました" });
 		} else {
-			return c.json({ error: result.error }, 500);
+			c.status(500);
+			return c.json({ error: result.error });
 		}
 	} catch (error) {
 		// 予期しないエラー
 		console.error("Logout error:", error);
+		c.status(500);
 		return c.json({
 			error: {
 				type: "INTERNAL_ERROR",
 				message: "内部サーバーエラーが発生しました",
 			},
-		}, 500);
+		});
 	}
 };
 
@@ -115,21 +125,24 @@ export const me = async (c: Context) => {
 		const userResult = await userRepository.findUserById(payload.userId, prisma);
 
 		if (!userResult.ok) {
-			return c.json({ error: userResult.error }, 404);
+			c.status(404);
+			return c.json({ error: userResult.error });
 		}
 
 		// パスワードハッシュを除外した安全なユーザー情報を返す
 		const { passwordHash, ...safeUser } = userResult.value;
 
-		return c.json({ user: safeUser }, 200);
+		c.status(200);
+		return c.json({ user: safeUser });
 	} catch (error) {
 		// 予期しないエラー
 		console.error("Get current user error:", error);
+		c.status(500);
 		return c.json({
 			error: {
 				type: "INTERNAL_ERROR",
 				message: "内部サーバーエラーが発生しました",
 			},
-		}, 500);
+		});
 	}
 };

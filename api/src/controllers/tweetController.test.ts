@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import * as tweetService from "../services/tweetService.ts";
 import { TweetErrorType } from "../utils/errors.ts";
-import { createTweet } from "./tweetController.ts";
+import { createTweet, getTweet } from "./tweetController.ts";
 
 vi.mock("../services/tweetService.ts");
 
@@ -108,6 +108,115 @@ describe("tweetController", () => {
         { error: "Invalid tweet data" },
         400,
       );
+    });
+  });
+
+  describe("getTweet", () => {
+    it("should return tweet with status 200 when found", async () => {
+      // Arrange
+      const mockTweet = {
+        id: 1,
+        content: "Test tweet",
+        userId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      const mockContext = {
+        req: {
+          param: vi.fn().mockReturnValue("1"),
+        },
+        json: vi.fn().mockReturnValue("json response"),
+        status: vi.fn().mockReturnThis(),
+      } as any;
+      vi.spyOn(tweetService, "getTweetById").mockResolvedValue({
+        ok: true,
+        value: mockTweet,
+      });
+
+      // Act
+      const response = await getTweet(mockContext);
+
+      // Assert
+      expect(tweetService.getTweetById).toHaveBeenCalledWith(
+        1,
+        expect.anything(),
+      );
+      expect(mockContext.status).toHaveBeenCalledWith(200);
+      expect(mockContext.json).toHaveBeenCalledWith(mockTweet);
+    });
+
+    it("should return 400 when id parameter is invalid", async () => {
+      // Arrange
+      const mockContext = {
+        req: {
+          param: vi.fn().mockReturnValue("invalid"),
+        },
+        json: vi.fn().mockReturnValue("json response"),
+        status: vi.fn().mockReturnThis(),
+      } as any;
+
+      // Act
+      const response = await getTweet(mockContext);
+
+      // Assert
+      expect(mockContext.status).toHaveBeenCalledWith(400);
+      expect(mockContext.json).toHaveBeenCalledWith({
+        error: "Invalid tweet ID",
+      });
+    });
+
+    it("should return 404 when tweet is not found", async () => {
+      // Arrange
+      const mockContext = {
+        req: {
+          param: vi.fn().mockReturnValue("999"),
+        },
+        json: vi.fn().mockReturnValue("json response"),
+        status: vi.fn().mockReturnThis(),
+      } as any;
+      vi.spyOn(tweetService, "getTweetById").mockResolvedValue({
+        ok: false,
+        error: {
+          type: TweetErrorType.TWEET_NOT_FOUND,
+          message: "Tweet not found",
+        },
+      });
+
+      // Act
+      const response = await getTweet(mockContext);
+
+      // Assert
+      expect(mockContext.status).toHaveBeenCalledWith(404);
+      expect(mockContext.json).toHaveBeenCalledWith({
+        error: "Tweet not found",
+      });
+    });
+
+    it("should return 500 when internal error occurs", async () => {
+      // Arrange
+      const mockContext = {
+        req: {
+          param: vi.fn().mockReturnValue("1"),
+        },
+        json: vi.fn().mockReturnValue("json response"),
+        status: vi.fn().mockReturnThis(),
+      } as any;
+      vi.spyOn(tweetService, "getTweetById").mockResolvedValue({
+        ok: false,
+        error: {
+          type: TweetErrorType.INTERNAL_ERROR,
+          message: "Internal error",
+        },
+      });
+
+      // Act
+      const response = await getTweet(mockContext);
+
+      // Assert
+      expect(mockContext.status).toHaveBeenCalledWith(500);
+      expect(mockContext.json).toHaveBeenCalledWith({
+        error: "Internal error",
+      });
     });
   });
 });

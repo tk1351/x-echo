@@ -45,6 +45,8 @@ The X-Echo project is in the early development phase, with the focus on establis
 - ✅ Tweet creation API implemented
 - ✅ Tweet content validation with Zod
 - ✅ Authentication required for tweet creation
+- ✅ Single tweet retrieval endpoint implemented
+- ✅ Error handling for tweet retrieval (invalid ID, not found, server error)
 
 ### Testing
 - ✅ Testing infrastructure set up with Vitest
@@ -84,7 +86,8 @@ The X-Echo project is in the early development phase, with the focus on establis
 
 ### Tweet Functionality
 - ✅ Tweet creation
-- ❌ Tweet retrieval (single and lists)
+- ✅ Tweet retrieval (single)
+- ❌ Tweet retrieval (lists)
 - ❌ Timeline functionality
 - ❌ Tweet deletion
 
@@ -140,7 +143,8 @@ The X-Echo project is in the early development phase, with the focus on establis
 
 ### Milestone 2: Tweet Functionality
 - ✅ Tweet creation
-- Tweet retrieval
+- ✅ Tweet retrieval (single)
+- Tweet retrieval (lists)
 - Timeline implementation
 - Tweet interactions (favorites, retweets)
 

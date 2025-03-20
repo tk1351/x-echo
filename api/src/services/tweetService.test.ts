@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import * as tweetRepository from "../domain/tweet/tweetRepository.ts";
 import { TweetErrorType } from "../utils/errors.ts";
-import { createTweet } from "./tweetService.ts";
+import { createTweet, getTweetById } from "./tweetService.ts";
 
 vi.mock("../domain/tweet/tweetRepository.ts");
 
@@ -118,6 +118,72 @@ describe("tweetService", () => {
       expect(result.ok).toBe(false);
       if (!result.ok) {
         expect(result.error.type).toBe(TweetErrorType.TWEET_CREATION_FAILED);
+      }
+    });
+  });
+
+  describe("getTweetById", () => {
+    it("should return tweet when found", async () => {
+      // Arrange
+      const mockPrisma = {} as any;
+      const mockTweet = {
+        id: 1,
+        content: "Test tweet",
+        userId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      vi.spyOn(tweetRepository, "getTweetById").mockResolvedValue({
+        ok: true,
+        value: mockTweet,
+      });
+
+      // Act
+      const result = await getTweetById(1, mockPrisma);
+
+      // Assert
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toEqual(mockTweet);
+      }
+      expect(tweetRepository.getTweetById).toHaveBeenCalledWith(1, mockPrisma);
+    });
+
+    it("should return TWEET_NOT_FOUND error when tweet is not found", async () => {
+      // Arrange
+      const mockPrisma = {} as any;
+      vi.spyOn(tweetRepository, "getTweetById").mockResolvedValue({
+        ok: false,
+        error: new Error("Tweet not found with id: 999"),
+      });
+
+      // Act
+      const result = await getTweetById(999, mockPrisma);
+
+      // Assert
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.type).toBe(TweetErrorType.TWEET_NOT_FOUND);
+        expect(result.error.message).toBe("Tweet with id 999 not found");
+      }
+    });
+
+    it("should return INTERNAL_ERROR when repository throws unexpected error", async () => {
+      // Arrange
+      const mockPrisma = {} as any;
+      vi.spyOn(tweetRepository, "getTweetById").mockResolvedValue({
+        ok: false,
+        error: new Error("Database error"),
+      });
+
+      // Act
+      const result = await getTweetById(1, mockPrisma);
+
+      // Assert
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.type).toBe(TweetErrorType.INTERNAL_ERROR);
+        expect(result.error.message).toBe("Failed to retrieve tweet");
       }
     });
   });

@@ -1,7 +1,10 @@
 import type { Context } from "hono";
 import { z } from "zod";
 import prisma from "../lib/prisma.js";
-import { createTweet as createTweetService, getTweetById } from "../services/tweetService.js";
+import {
+  createTweet as createTweetService,
+  getTweetById,
+} from "../services/tweetService.js";
 import { TweetErrorType } from "../utils/errors.js";
 
 export const tweetCreateSchema = z.object({
@@ -75,9 +78,9 @@ export const createTweet = async (c: Context) => {
 export const getTweet = async (c: Context) => {
   // Get tweet ID from URL parameter
   const idParam = c.req.param("id");
-  const id = parseInt(idParam, 10);
+  const id = Number.parseInt(idParam, 10);
 
-  if (isNaN(id)) {
+  if (Number.isNaN(id)) {
     c.status(400);
     return c.json({ error: "Invalid tweet ID" });
   }

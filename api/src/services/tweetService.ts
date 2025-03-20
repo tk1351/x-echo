@@ -1,5 +1,8 @@
 import type { PrismaClient } from "@prisma/client";
-import { createTweet as createTweetRepo, getTweetById as getTweetByIdRepo } from "../domain/tweet/tweetRepository.js";
+import {
+  createTweet as createTweetRepo,
+  getTweetById as getTweetByIdRepo,
+} from "../domain/tweet/tweetRepository.js";
 import type { TweetCreateInput, TweetResponse } from "../types/index.js";
 import { TweetErrorType } from "../utils/errors.js";
 import type { Result } from "../utils/result.js";

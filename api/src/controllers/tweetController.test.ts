@@ -137,7 +137,10 @@ describe("tweetController", () => {
       const response = await getTweet(mockContext);
 
       // Assert
-      expect(tweetService.getTweetById).toHaveBeenCalledWith(1, expect.anything());
+      expect(tweetService.getTweetById).toHaveBeenCalledWith(
+        1,
+        expect.anything(),
+      );
       expect(mockContext.status).toHaveBeenCalledWith(200);
       expect(mockContext.json).toHaveBeenCalledWith(mockTweet);
     });

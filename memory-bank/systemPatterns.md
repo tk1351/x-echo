@@ -62,6 +62,26 @@ Benefits:
 - Enforces domain constraints
 - Improves static analysis
 
+### Const Object Pattern
+Used instead of TypeScript enums to define a set of related constants:
+
+```typescript
+const UserErrorType = {
+  VALIDATION_ERROR: "VALIDATION_ERROR",
+  USER_ALREADY_EXISTS: "USER_ALREADY_EXISTS",
+  USER_NOT_FOUND: "USER_NOT_FOUND",
+} as const satisfies Record<string, string>;
+
+type UserErrorType = (typeof UserErrorType)[keyof typeof UserErrorType];
+```
+
+Benefits:
+- Smaller bundle size compared to TypeScript enums
+- Better type safety
+- More flexible type definitions
+- Easier to add or modify values
+- Avoids runtime issues with TypeScript enums
+
 ### Repository Pattern
 Used to abstract data access:
 

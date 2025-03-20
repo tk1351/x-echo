@@ -158,6 +158,19 @@ Additional models for Follow, Tweet, Favorite, and Retweet will be implemented a
 ### Code Quality
 - Linting and formatting using Biome
 - Type checking with TypeScript
+  - Avoid using TypeScript enums, prefer const object pattern instead:
+    ```typescript
+    // Instead of enum:
+    // enum Status { Active = "ACTIVE", Inactive = "INACTIVE" }
+
+    // Use const object pattern:
+    const Status = {
+      Active: "ACTIVE",
+      Inactive: "INACTIVE"
+    } as const satisfies Record<string, string>;
+
+    type Status = (typeof Status)[keyof typeof Status];
+    ```
 - Unit and integration testing with Vitest
 - Test-driven development approach
 

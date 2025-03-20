@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from "node:crypto";
 import type { User } from "@prisma/client";
 import { sign, verify } from "hono/jwt";
 import type {

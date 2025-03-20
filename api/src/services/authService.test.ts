@@ -80,7 +80,7 @@ describe("authService", () => {
 
       // bcryptのcompareをtrueに設定
       const { compare } = await import("bcrypt");
-      vi.mocked(compare).mockResolvedValueOnce(true as unknown as void);
+      vi.mocked(compare).mockResolvedValueOnce(true as unknown as undefined);
 
       // Act
       const result = await login(credentials, mockPrisma);
@@ -135,7 +135,7 @@ describe("authService", () => {
 
       // bcryptのcompareをfalseに設定
       const { compare } = await import("bcrypt");
-      vi.mocked(compare).mockResolvedValueOnce(false as unknown as void);
+      vi.mocked(compare).mockResolvedValueOnce(false as unknown as undefined);
 
       // Act
       const result = await login(credentials, mockPrisma);

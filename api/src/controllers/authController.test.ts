@@ -237,7 +237,7 @@ describe("authController", () => {
       const mockContext = createMockContext();
       const token = "Bearer valid.access.token";
 
-      mockContext.headers["Authorization"] = token;
+      mockContext.headers.Authorization = token;
 
       vi.spyOn(authService, "logout").mockResolvedValueOnce({
         ok: true,
@@ -261,7 +261,7 @@ describe("authController", () => {
     it("トークンが提供されていない場合エラーレスポンスを返すこと", async () => {
       // Arrange
       const mockContext = createMockContext();
-      mockContext.headers["Authorization"] = undefined;
+      mockContext.headers.Authorization = undefined;
 
       // Act
       await logout(mockContext);
@@ -281,7 +281,7 @@ describe("authController", () => {
       const mockContext = createMockContext();
       const token = "Bearer valid.access.token";
 
-      mockContext.headers["Authorization"] = token;
+      mockContext.headers.Authorization = token;
 
       vi.spyOn(authService, "logout").mockResolvedValueOnce({
         ok: false,

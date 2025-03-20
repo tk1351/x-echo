@@ -1,7 +1,8 @@
 import type { PrismaClient, User } from "@prisma/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { UserUpdateData } from "../../types/index.js";
 import { UserErrorType } from "../../utils/errors.js";
-import { findUserById, findUserByIdentifier } from "./userRepository.js";
+import { findUserById, findUserByIdentifier, findUserByUsername, updateUser } from "./userRepository.js";
 
 describe("userRepository", () => {
   let mockPrisma: any;

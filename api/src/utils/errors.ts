@@ -42,3 +42,16 @@ export type ValidationError = {
   type: ValidationErrorType;
   message: string;
 };
+
+// ツイートエラータイプ
+export enum TweetErrorType {
+  INVALID_TWEET_DATA = "INVALID_TWEET_DATA",
+  TWEET_CREATION_FAILED = "TWEET_CREATION_FAILED",
+  UNAUTHORIZED_ACTION = "UNAUTHORIZED_ACTION",
+}
+
+// ツイートエラー
+export type TweetError = {
+  type: TweetErrorType;
+  message: string;
+};

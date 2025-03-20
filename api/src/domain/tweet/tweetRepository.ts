@@ -56,7 +56,7 @@ export const getTweetsByUserId = async (
   userId: number,
   limit: number,
   prisma: PrismaClient,
-  cursor?: number
+  cursor?: number,
 ): Promise<Result<{ tweets: TweetResponse[]; hasMore: boolean }, Error>> => {
   try {
     // リクエストされた数より1つ多く取得して、さらにツイートがあるかどうかを判断
@@ -67,7 +67,7 @@ export const getTweetsByUserId = async (
       },
       orderBy: [
         { createdAt: "desc" },
-        { id: "desc" } // 一貫した順序付けのためにIDによる二次ソート
+        { id: "desc" }, // 一貫した順序付けのためにIDによる二次ソート
       ],
       take: limit + 1,
     });
@@ -99,7 +99,7 @@ export const getTweetsByUserId = async (
 export const getLatestTweets = async (
   limit: number,
   prisma: PrismaClient,
-  cursor?: number
+  cursor?: number,
 ): Promise<Result<{ tweets: TweetResponse[]; hasMore: boolean }, Error>> => {
   try {
     // リクエストされた数より1つ多く取得して、さらにツイートがあるかどうかを判断
@@ -107,7 +107,7 @@ export const getLatestTweets = async (
       where: cursor ? { id: { lt: cursor } } : {},
       orderBy: [
         { createdAt: "desc" },
-        { id: "desc" } // 一貫した順序付けのためにIDによる二次ソート
+        { id: "desc" }, // 一貫した順序付けのためにIDによる二次ソート
       ],
       take: limit + 1,
     });

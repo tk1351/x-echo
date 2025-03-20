@@ -1,7 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import * as tweetService from "../services/tweetService.ts";
 import { TweetErrorType } from "../utils/errors.ts";
-import { createTweet, getTweet, getUserTweets, getLatestTweets } from "./tweetController.ts";
+import {
+  createTweet,
+  getLatestTweets,
+  getTweet,
+  getUserTweets,
+} from "./tweetController.ts";
 
 vi.mock("../services/tweetService.ts");
 
@@ -251,8 +256,20 @@ describe("tweetController", () => {
     it("should return tweets when parameters are valid", async () => {
       // Arrange
       const mockTweets = [
-        { id: 3, content: "Tweet 3", userId: 1, createdAt: new Date(), updatedAt: new Date() },
-        { id: 2, content: "Tweet 2", userId: 1, createdAt: new Date(), updatedAt: new Date() },
+        {
+          id: 3,
+          content: "Tweet 3",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 2,
+          content: "Tweet 2",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ];
       const mockResponse = {
         tweets: mockTweets,
@@ -350,8 +367,20 @@ describe("tweetController", () => {
     it("should return tweets when parameters are valid", async () => {
       // Arrange
       const mockTweets = [
-        { id: 3, content: "Tweet 3", userId: 2, createdAt: new Date(), updatedAt: new Date() },
-        { id: 2, content: "Tweet 2", userId: 1, createdAt: new Date(), updatedAt: new Date() },
+        {
+          id: 3,
+          content: "Tweet 3",
+          userId: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 2,
+          content: "Tweet 2",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ];
       const mockResponse = {
         tweets: mockTweets,

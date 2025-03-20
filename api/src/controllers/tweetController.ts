@@ -119,9 +119,11 @@ export const getUserTweets = async (c: Context) => {
   const cursorParam = c.req.query("cursor");
 
   // Parse limit (default: 20)
-  const limit = limitParam ? parseInt(limitParam, 10) : 20;
+  const limit = limitParam ? Number.parseInt(limitParam, 10) : 20;
   // Parse cursor (明示的に型を定義)
-  const cursor: number | undefined = cursorParam ? parseInt(cursorParam, 10) : undefined;
+  const cursor: number | undefined = cursorParam
+    ? Number.parseInt(cursorParam, 10)
+    : undefined;
 
   // Validate limit
   if (Number.isNaN(limit) || limit <= 0 || limit > 100) {
@@ -132,7 +134,10 @@ export const getUserTweets = async (c: Context) => {
   }
 
   // Validate cursor
-  if (cursorParam && (Number.isNaN(cursor) || (cursor !== undefined && cursor <= 0))) {
+  if (
+    cursorParam &&
+    (Number.isNaN(cursor) || (cursor !== undefined && cursor <= 0))
+  ) {
     c.status(400);
     return c.json({
       error: "Invalid cursor parameter. Must be a positive integer",
@@ -171,9 +176,11 @@ export const getLatestTweets = async (c: Context) => {
   const cursorParam = c.req.query("cursor");
 
   // Parse limit (default: 20)
-  const limit = limitParam ? parseInt(limitParam, 10) : 20;
+  const limit = limitParam ? Number.parseInt(limitParam, 10) : 20;
   // Parse cursor (明示的に型を定義)
-  const cursor: number | undefined = cursorParam ? parseInt(cursorParam, 10) : undefined;
+  const cursor: number | undefined = cursorParam
+    ? Number.parseInt(cursorParam, 10)
+    : undefined;
 
   // Validate limit
   if (Number.isNaN(limit) || limit <= 0 || limit > 100) {
@@ -184,7 +191,10 @@ export const getLatestTweets = async (c: Context) => {
   }
 
   // Validate cursor
-  if (cursorParam && (Number.isNaN(cursor) || (cursor !== undefined && cursor <= 0))) {
+  if (
+    cursorParam &&
+    (Number.isNaN(cursor) || (cursor !== undefined && cursor <= 0))
+  ) {
     c.status(400);
     return c.json({
       error: "Invalid cursor parameter. Must be a positive integer",

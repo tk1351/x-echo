@@ -1,5 +1,9 @@
 import { Hono } from "hono";
-import { createTweet, getLatestTweets, getTweet } from "../controllers/tweetController.js";
+import {
+  createTweet,
+  getLatestTweets,
+  getTweet,
+} from "../controllers/tweetController.js";
 import { authenticate } from "../middleware/authMiddleware.js";
 
 const tweetsRouter = new Hono();

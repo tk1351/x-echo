@@ -1,11 +1,15 @@
 import type { PrismaClient } from "@prisma/client";
 import {
   createTweet as createTweetRepo,
+  getLatestTweets as getLatestTweetsRepo,
   getTweetById as getTweetByIdRepo,
   getTweetsByUserId,
-  getLatestTweets as getLatestTweetsRepo,
 } from "../domain/tweet/tweetRepository.js";
-import type { TweetCreateInput, TweetListResponse, TweetResponse } from "../types/index.js";
+import type {
+  TweetCreateInput,
+  TweetListResponse,
+  TweetResponse,
+} from "../types/index.js";
 import { TweetErrorType } from "../utils/errors.js";
 import type { Result } from "../utils/result.js";
 
@@ -128,8 +132,10 @@ export const getTweetsByUsername = async (
   username: string,
   limit: number,
   prisma: PrismaClient,
-  cursor?: number
-): Promise<Result<TweetListResponse, { type: TweetErrorType; message: string }>> => {
+  cursor?: number,
+): Promise<
+  Result<TweetListResponse, { type: TweetErrorType; message: string }>
+> => {
   // limitパラメータの検証
   if (limit <= 0 || limit > 100) {
     return {
@@ -178,9 +184,10 @@ export const getTweetsByUsername = async (
         tweets: result.value.tweets,
         pagination: {
           hasMore: result.value.hasMore,
-          nextCursor: result.value.hasMore && result.value.tweets.length > 0
-            ? String(result.value.tweets[result.value.tweets.length - 1].id)
-            : undefined,
+          nextCursor:
+            result.value.hasMore && result.value.tweets.length > 0
+              ? String(result.value.tweets[result.value.tweets.length - 1].id)
+              : undefined,
         },
       },
     };
@@ -205,8 +212,10 @@ export const getTweetsByUsername = async (
 export const getLatestTweets = async (
   limit: number,
   prisma: PrismaClient,
-  cursor?: number
-): Promise<Result<TweetListResponse, { type: TweetErrorType; message: string }>> => {
+  cursor?: number,
+): Promise<
+  Result<TweetListResponse, { type: TweetErrorType; message: string }>
+> => {
   // limitパラメータの検証
   if (limit <= 0 || limit > 100) {
     return {
@@ -239,9 +248,10 @@ export const getLatestTweets = async (
         tweets: result.value.tweets,
         pagination: {
           hasMore: result.value.hasMore,
-          nextCursor: result.value.hasMore && result.value.tweets.length > 0
-            ? String(result.value.tweets[result.value.tweets.length - 1].id)
-            : undefined,
+          nextCursor:
+            result.value.hasMore && result.value.tweets.length > 0
+              ? String(result.value.tweets[result.value.tweets.length - 1].id)
+              : undefined,
         },
       },
     };

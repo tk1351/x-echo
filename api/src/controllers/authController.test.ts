@@ -1,9 +1,9 @@
-import { Role } from "../types/role.js";
 import type { Context } from "hono";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import * as userRepository from "../domain/user/userRepository.js";
 import * as authService from "../services/authService.js";
 import type { JwtPayload, TokenPair } from "../types/auth.js";
+import { Role } from "../types/role.js";
 import {
   AuthErrorType,
   UserErrorType,

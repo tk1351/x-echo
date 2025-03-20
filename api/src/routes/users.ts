@@ -1,10 +1,10 @@
 import { Hono } from "hono";
+import { getUserTweets } from "../controllers/tweetController.js";
 import {
   getUserProfile,
   registerUser,
   updateUserProfile,
 } from "../controllers/userController.js";
-import { getUserTweets } from "../controllers/tweetController.js";
 import { authenticate } from "../middleware/authMiddleware.js";
 
 const usersRouter = new Hono();

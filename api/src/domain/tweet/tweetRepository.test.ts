@@ -1,5 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
-import { createTweet, getTweetById, getTweetsByUserId, getLatestTweets } from "./tweetRepository.ts";
+import {
+  createTweet,
+  getLatestTweets,
+  getTweetById,
+  getTweetsByUserId,
+} from "./tweetRepository.ts";
 
 describe("tweetRepository", () => {
   describe("createTweet", () => {
@@ -133,9 +138,27 @@ describe("tweetRepository", () => {
     it("should retrieve tweets by user ID with pagination", async () => {
       // Arrange
       const mockTweets = [
-        { id: 3, content: "Tweet 3", userId: 1, createdAt: new Date(), updatedAt: new Date() },
-        { id: 2, content: "Tweet 2", userId: 1, createdAt: new Date(), updatedAt: new Date() },
-        { id: 1, content: "Tweet 1", userId: 1, createdAt: new Date(), updatedAt: new Date() },
+        {
+          id: 3,
+          content: "Tweet 3",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 2,
+          content: "Tweet 2",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 1,
+          content: "Tweet 1",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ];
       const mockPrisma = {
         tweet: {
@@ -164,8 +187,20 @@ describe("tweetRepository", () => {
     it("should handle cursor-based pagination", async () => {
       // Arrange
       const mockTweets = [
-        { id: 2, content: "Tweet 2", userId: 1, createdAt: new Date(), updatedAt: new Date() },
-        { id: 1, content: "Tweet 1", userId: 1, createdAt: new Date(), updatedAt: new Date() },
+        {
+          id: 2,
+          content: "Tweet 2",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 1,
+          content: "Tweet 1",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ];
       const mockPrisma = {
         tweet: {
@@ -213,9 +248,27 @@ describe("tweetRepository", () => {
     it("should retrieve latest tweets with pagination", async () => {
       // Arrange
       const mockTweets = [
-        { id: 3, content: "Tweet 3", userId: 2, createdAt: new Date(), updatedAt: new Date() },
-        { id: 2, content: "Tweet 2", userId: 1, createdAt: new Date(), updatedAt: new Date() },
-        { id: 1, content: "Tweet 1", userId: 1, createdAt: new Date(), updatedAt: new Date() },
+        {
+          id: 3,
+          content: "Tweet 3",
+          userId: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 2,
+          content: "Tweet 2",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 1,
+          content: "Tweet 1",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ];
       const mockPrisma = {
         tweet: {
@@ -244,8 +297,20 @@ describe("tweetRepository", () => {
     it("should handle cursor-based pagination", async () => {
       // Arrange
       const mockTweets = [
-        { id: 2, content: "Tweet 2", userId: 1, createdAt: new Date(), updatedAt: new Date() },
-        { id: 1, content: "Tweet 1", userId: 1, createdAt: new Date(), updatedAt: new Date() },
+        {
+          id: 2,
+          content: "Tweet 2",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 1,
+          content: "Tweet 1",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ];
       const mockPrisma = {
         tweet: {

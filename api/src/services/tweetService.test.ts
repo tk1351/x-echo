@@ -1,7 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import * as tweetRepository from "../domain/tweet/tweetRepository.ts";
 import { TweetErrorType } from "../utils/errors.ts";
-import { createTweet, getTweetById, getTweetsByUsername, getLatestTweets } from "./tweetService.ts";
+import {
+  createTweet,
+  getLatestTweets,
+  getTweetById,
+  getTweetsByUsername,
+} from "./tweetService.ts";
 
 vi.mock("../domain/tweet/tweetRepository.ts");
 
@@ -195,14 +200,22 @@ describe("tweetService", () => {
 
       // Act
       const tooSmallResult = await getTweetsByUsername("user1", 0, mockPrisma);
-      const tooLargeResult = await getTweetsByUsername("user1", 101, mockPrisma);
+      const tooLargeResult = await getTweetsByUsername(
+        "user1",
+        101,
+        mockPrisma,
+      );
 
       // Assert
       expect(tooSmallResult.ok).toBe(false);
       expect(tooLargeResult.ok).toBe(false);
       if (!tooSmallResult.ok && !tooLargeResult.ok) {
-        expect(tooSmallResult.error.type).toBe(TweetErrorType.INVALID_PAGINATION_PARAMS);
-        expect(tooLargeResult.error.type).toBe(TweetErrorType.INVALID_PAGINATION_PARAMS);
+        expect(tooSmallResult.error.type).toBe(
+          TweetErrorType.INVALID_PAGINATION_PARAMS,
+        );
+        expect(tooLargeResult.error.type).toBe(
+          TweetErrorType.INVALID_PAGINATION_PARAMS,
+        );
       }
     });
 
@@ -221,7 +234,9 @@ describe("tweetService", () => {
       expect(result.ok).toBe(false);
       if (!result.ok) {
         expect(result.error.type).toBe(TweetErrorType.USER_NOT_FOUND);
-        expect(result.error.message).toBe("User with username nonexistent not found");
+        expect(result.error.message).toBe(
+          "User with username nonexistent not found",
+        );
       }
       expect(mockPrisma.user.findUnique).toHaveBeenCalledWith({
         where: { username: "nonexistent" },
@@ -237,8 +252,20 @@ describe("tweetService", () => {
         },
       } as any;
       const mockTweets = [
-        { id: 3, content: "Tweet 3", userId: 1, createdAt: new Date(), updatedAt: new Date() },
-        { id: 2, content: "Tweet 2", userId: 1, createdAt: new Date(), updatedAt: new Date() },
+        {
+          id: 3,
+          content: "Tweet 3",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 2,
+          content: "Tweet 2",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ];
       vi.spyOn(tweetRepository, "getTweetsByUserId").mockResolvedValue({
         ok: true,
@@ -258,7 +285,12 @@ describe("tweetService", () => {
         expect(result.value.pagination.hasMore).toBe(true);
         expect(result.value.pagination.nextCursor).toBe("2");
       }
-      expect(tweetRepository.getTweetsByUserId).toHaveBeenCalledWith(1, 10, mockPrisma, undefined);
+      expect(tweetRepository.getTweetsByUserId).toHaveBeenCalledWith(
+        1,
+        10,
+        mockPrisma,
+        undefined,
+      );
     });
 
     it("should handle repository errors", async () => {
@@ -298,8 +330,12 @@ describe("tweetService", () => {
       expect(tooSmallResult.ok).toBe(false);
       expect(tooLargeResult.ok).toBe(false);
       if (!tooSmallResult.ok && !tooLargeResult.ok) {
-        expect(tooSmallResult.error.type).toBe(TweetErrorType.INVALID_PAGINATION_PARAMS);
-        expect(tooLargeResult.error.type).toBe(TweetErrorType.INVALID_PAGINATION_PARAMS);
+        expect(tooSmallResult.error.type).toBe(
+          TweetErrorType.INVALID_PAGINATION_PARAMS,
+        );
+        expect(tooLargeResult.error.type).toBe(
+          TweetErrorType.INVALID_PAGINATION_PARAMS,
+        );
       }
     });
 
@@ -307,8 +343,20 @@ describe("tweetService", () => {
       // Arrange
       const mockPrisma = {} as any;
       const mockTweets = [
-        { id: 3, content: "Tweet 3", userId: 2, createdAt: new Date(), updatedAt: new Date() },
-        { id: 2, content: "Tweet 2", userId: 1, createdAt: new Date(), updatedAt: new Date() },
+        {
+          id: 3,
+          content: "Tweet 3",
+          userId: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 2,
+          content: "Tweet 2",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ];
       vi.spyOn(tweetRepository, "getLatestTweets").mockResolvedValue({
         ok: true,
@@ -328,7 +376,11 @@ describe("tweetService", () => {
         expect(result.value.pagination.hasMore).toBe(true);
         expect(result.value.pagination.nextCursor).toBe("2");
       }
-      expect(tweetRepository.getLatestTweets).toHaveBeenCalledWith(10, mockPrisma, undefined);
+      expect(tweetRepository.getLatestTweets).toHaveBeenCalledWith(
+        10,
+        mockPrisma,
+        undefined,
+      );
     });
 
     it("should handle repository errors", async () => {

@@ -122,7 +122,7 @@ Additional models for Follow, Tweet, Favorite, and Retweet will be implemented a
 - `GET /api/users/:username/following` - Get users being followed
 
 ### Tweets
-- `POST /api/tweets` - Create a new tweet
+- ✅ `POST /api/tweets` - Create a new tweet
 - `GET /api/tweets/:id` - Get a specific tweet
 - `DELETE /api/tweets/:id` - Delete a tweet
 - `GET /api/users/:username/tweets` - Get tweets by a user

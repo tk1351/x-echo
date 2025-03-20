@@ -56,6 +56,8 @@ export const TweetErrorType = {
   UNAUTHORIZED_ACTION: "UNAUTHORIZED_ACTION",
   TWEET_NOT_FOUND: "TWEET_NOT_FOUND",
   INTERNAL_ERROR: "INTERNAL_ERROR",
+  INVALID_PAGINATION_PARAMS: "INVALID_PAGINATION_PARAMS",
+  USER_NOT_FOUND: "USER_NOT_FOUND",
 } as const satisfies Record<string, string>;
 
 export type TweetErrorType = (typeof TweetErrorType)[keyof typeof TweetErrorType];

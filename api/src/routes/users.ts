@@ -1,5 +1,9 @@
 import { Hono } from "hono";
-import { getUserProfile, registerUser, updateUserProfile } from "../controllers/userController.js";
+import {
+  getUserProfile,
+  registerUser,
+  updateUserProfile,
+} from "../controllers/userController.js";
 import { authenticate } from "../middleware/authMiddleware.js";
 
 const usersRouter = new Hono();

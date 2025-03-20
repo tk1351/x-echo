@@ -1,10 +1,17 @@
 import type { PrismaClient, User } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import * as userRepository from "../domain/user/userRepository.js";
 import type { UserUpdateData } from "../types/index.js";
 import { UserErrorType } from "../utils/errors.ts";
-import * as userRepository from "../domain/user/userRepository.js";
-import { checkUserExists, createUser, getUserProfile, hashPassword, updateUserProfile, validateProfileData } from "./userService.ts";
+import {
+  checkUserExists,
+  createUser,
+  getUserProfile,
+  hashPassword,
+  updateUserProfile,
+  validateProfileData,
+} from "./userService.ts";
 
 // モックの作成
 vi.mock("bcrypt");
@@ -141,7 +148,10 @@ describe("getUserProfile", () => {
     });
 
     // Act
-    const result = await getUserProfile("nonexistent", mockPrisma as PrismaClient);
+    const result = await getUserProfile(
+      "nonexistent",
+      mockPrisma as PrismaClient,
+    );
 
     // Assert
     expect(result.ok).toBe(false);
@@ -195,7 +205,11 @@ describe("updateUserProfile", () => {
     });
 
     // Act
-    const result = await updateUserProfile(userId, updateData, mockPrisma as PrismaClient);
+    const result = await updateUserProfile(
+      userId,
+      updateData,
+      mockPrisma as PrismaClient,
+    );
 
     // Assert
     expect(result.ok).toBe(true);
@@ -219,7 +233,11 @@ describe("updateUserProfile", () => {
     };
 
     // Act
-    const result = await updateUserProfile(userId, invalidData, mockPrisma as PrismaClient);
+    const result = await updateUserProfile(
+      userId,
+      invalidData,
+      mockPrisma as PrismaClient,
+    );
 
     // Assert
     expect(result.ok).toBe(false);
@@ -245,7 +263,11 @@ describe("updateUserProfile", () => {
     });
 
     // Act
-    const result = await updateUserProfile(userId, updateData, mockPrisma as PrismaClient);
+    const result = await updateUserProfile(
+      userId,
+      updateData,
+      mockPrisma as PrismaClient,
+    );
 
     // Assert
     expect(result.ok).toBe(false);

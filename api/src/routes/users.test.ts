@@ -1,9 +1,9 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
 import { Hono } from "hono";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import * as userService from "../services/userService.js";
 import type { JwtPayload } from "../types/auth.js";
 import type { UserProfileResponse } from "../types/index.js";
 import { UserErrorType } from "../utils/errors.js";
-import * as userService from "../services/userService.js";
 import usersRouter from "./users.js";
 
 // モックの作成

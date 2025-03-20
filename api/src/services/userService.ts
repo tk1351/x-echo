@@ -1,8 +1,12 @@
 import type { PrismaClient } from "@prisma/client";
 import type { User } from "@prisma/client";
 import bcrypt from "bcrypt";
-import type { UserCreateInput, UserProfileResponse, UserUpdateData } from "../types/index.js";
 import * as userRepository from "../domain/user/userRepository.js";
+import type {
+  UserCreateInput,
+  UserProfileResponse,
+  UserUpdateData,
+} from "../types/index.js";
 import { UserErrorType } from "../utils/errors.js";
 import type { UserError } from "../utils/errors.js";
 import type { Result } from "../utils/result.js";

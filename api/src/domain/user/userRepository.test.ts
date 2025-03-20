@@ -2,7 +2,12 @@ import type { PrismaClient, User } from "@prisma/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { UserUpdateData } from "../../types/index.js";
 import { UserErrorType } from "../../utils/errors.js";
-import { findUserById, findUserByIdentifier, findUserByUsername, updateUser } from "./userRepository.js";
+import {
+  findUserById,
+  findUserByIdentifier,
+  findUserByUsername,
+  updateUser,
+} from "./userRepository.js";
 
 describe("userRepository", () => {
   let mockPrisma: any;
@@ -150,7 +155,10 @@ describe("userRepository", () => {
       mockPrisma.user.findUnique.mockResolvedValue(mockUser);
 
       // Act
-      const result = await findUserByUsername("testuser", mockPrisma as PrismaClient);
+      const result = await findUserByUsername(
+        "testuser",
+        mockPrisma as PrismaClient,
+      );
 
       // Assert
       expect(result.ok).toBe(true);
@@ -167,7 +175,10 @@ describe("userRepository", () => {
       mockPrisma.user.findUnique.mockResolvedValue(null);
 
       // Act
-      const result = await findUserByUsername("nonexistent", mockPrisma as PrismaClient);
+      const result = await findUserByUsername(
+        "nonexistent",
+        mockPrisma as PrismaClient,
+      );
 
       // Assert
       expect(result.ok).toBe(false);
@@ -182,7 +193,10 @@ describe("userRepository", () => {
       mockPrisma.user.findUnique.mockRejectedValue(new Error("Database error"));
 
       // Act
-      const result = await findUserByUsername("testuser", mockPrisma as PrismaClient);
+      const result = await findUserByUsername(
+        "testuser",
+        mockPrisma as PrismaClient,
+      );
 
       // Assert
       expect(result.ok).toBe(false);
@@ -212,7 +226,11 @@ describe("userRepository", () => {
       mockPrisma.user.update.mockResolvedValue(updatedUser);
 
       // Act
-      const result = await updateUser(userId, updateData, mockPrisma as PrismaClient);
+      const result = await updateUser(
+        userId,
+        updateData,
+        mockPrisma as PrismaClient,
+      );
 
       // Assert
       expect(result.ok).toBe(true);
@@ -231,10 +249,16 @@ describe("userRepository", () => {
       const updateData: UserUpdateData = {
         displayName: "Updated Name",
       };
-      mockPrisma.user.update.mockRejectedValue(new Error("Record to update not found"));
+      mockPrisma.user.update.mockRejectedValue(
+        new Error("Record to update not found"),
+      );
 
       // Act
-      const result = await updateUser(userId, updateData, mockPrisma as PrismaClient);
+      const result = await updateUser(
+        userId,
+        updateData,
+        mockPrisma as PrismaClient,
+      );
 
       // Assert
       expect(result.ok).toBe(false);
@@ -252,7 +276,11 @@ describe("userRepository", () => {
       mockPrisma.user.update.mockRejectedValue(new Error("Database error"));
 
       // Act
-      const result = await updateUser(userId, updateData, mockPrisma as PrismaClient);
+      const result = await updateUser(
+        userId,
+        updateData,
+        mockPrisma as PrismaClient,
+      );
 
       // Assert
       expect(result.ok).toBe(false);

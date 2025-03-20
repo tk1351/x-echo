@@ -1,9 +1,13 @@
 import type { Context } from "hono";
 import { z } from "zod";
 import prisma from "../lib/prisma.js";
-import { createUser, getUserProfile as getProfile, updateUserProfile as updateProfile } from "../services/userService.js";
-import { UserErrorType } from "../utils/errors.js";
+import {
+  createUser,
+  getUserProfile as getProfile,
+  updateUserProfile as updateProfile,
+} from "../services/userService.js";
 import type { UserUpdateData } from "../types/index.js";
+import { UserErrorType } from "../utils/errors.js";
 
 export const userUpdateSchema = z.object({
   displayName: z.string().min(1).max(50).optional(),
@@ -73,10 +77,7 @@ export const updateUserProfile = async (c: Context) => {
   // 認証ミドルウェアで設定されたJWTペイロードからユーザーIDを取得
   const jwtPayload = c.get("jwtPayload");
   if (!jwtPayload || !jwtPayload.userId) {
-    return c.json(
-      { error: "認証情報が不足しています" },
-      401,
-    );
+    return c.json({ error: "認証情報が不足しています" }, 401);
   }
 
   // ユーザープロファイルを更新

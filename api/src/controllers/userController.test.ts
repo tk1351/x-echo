@@ -4,7 +4,13 @@ import * as userService from "../services/userService.ts";
 import type { UserError } from "../utils/errors.ts";
 import { UserErrorType } from "../utils/errors.ts";
 import type { Result } from "../utils/result.js";
-import { getUserProfile, registerUser, updateUserProfile, userCreateSchema, userUpdateSchema } from "./userController.ts";
+import {
+  getUserProfile,
+  registerUser,
+  updateUserProfile,
+  userCreateSchema,
+  userUpdateSchema,
+} from "./userController.ts";
 
 // モックの作成
 vi.mock("../services/userService.ts");

@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import { z } from "zod";
 import prisma from "../lib/prisma.js";
-import { createTweet as createTweetService } from "../services/tweetService.js";
+import { createTweet as createTweetService, getTweetById } from "../services/tweetService.js";
 import { TweetErrorType } from "../utils/errors.js";
 
 export const tweetCreateSchema = z.object({
@@ -65,4 +65,37 @@ export const createTweet = async (c: Context) => {
   }
 
   return c.json(result.value, 201);
+};
+
+/**
+ * Controller to retrieve a tweet by its ID
+ * @param c Hono context
+ * @returns JSON response
+ */
+export const getTweet = async (c: Context) => {
+  // Get tweet ID from URL parameter
+  const idParam = c.req.param("id");
+  const id = parseInt(idParam, 10);
+
+  if (isNaN(id)) {
+    c.status(400);
+    return c.json({ error: "Invalid tweet ID" });
+  }
+
+  // Get tweet
+  const result = await getTweetById(id, prisma);
+
+  if (!result.ok) {
+    switch (result.error.type) {
+      case TweetErrorType.TWEET_NOT_FOUND:
+        c.status(404);
+        return c.json({ error: result.error.message });
+      default:
+        c.status(500);
+        return c.json({ error: result.error.message });
+    }
+  }
+
+  c.status(200);
+  return c.json(result.value);
 };

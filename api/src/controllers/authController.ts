@@ -22,10 +22,10 @@ export const login = async (c: Context) => {
         refreshToken: result.value.refreshToken,
         user: result.value.user,
       });
-    } else {
-      c.status(401);
-      return c.json({ error: result.error });
     }
+
+    c.status(401);
+    return c.json({ error: result.error });
   } catch (error) {
     // リクエストボディのパース失敗など
     console.error("Login error:", error);
@@ -56,10 +56,10 @@ export const refresh = async (c: Context) => {
         refreshToken: result.value.refreshToken,
         user: result.value.user,
       });
-    } else {
-      c.status(401);
-      return c.json({ error: result.error });
     }
+
+    c.status(401);
+    return c.json({ error: result.error });
   } catch (error) {
     // リクエストボディのパース失敗など
     console.error("Token refresh error:", error);
@@ -98,10 +98,10 @@ export const logout = async (c: Context) => {
     if (result.ok) {
       c.status(200);
       return c.json({ message: "ログアウトしました" });
-    } else {
-      c.status(500);
-      return c.json({ error: result.error });
     }
+
+    c.status(500);
+    return c.json({ error: result.error });
   } catch (error) {
     // 予期しないエラー
     console.error("Logout error:", error);

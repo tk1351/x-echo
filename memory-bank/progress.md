@@ -118,6 +118,7 @@ The X-Echo project is in the early development phase, with the focus on establis
 1. **Authentication Controller Response Format**: Fixed response format in `authController.ts` to use `c.status(statusCode); c.json(data);` instead of `c.json(data, statusCode)`
 2. **JWT Payload Type Definition**: Corrected `JwtPayload` type to use `Role` enum instead of `string` for the `role` property
 3. **Test Code Consistency**: Updated test code to use `Role.USER` enum value instead of `"USER"` string
+4. **Unnecessary `else` Clauses**: Removed unnecessary `else` clauses in `authController.ts` to improve code readability and follow early return pattern
 
 ### Blockers
 1. **None currently**: No critical blockers at this stage
@@ -167,6 +168,8 @@ The X-Echo project is in the early development phase, with the focus on establis
 - Using Biome for linting and formatting
 - TypeScript for type safety
 - Following established coding standards
+- Applying early return pattern to flatten conditional branches
+- Removing unnecessary `else` clauses when `if` blocks always return
 
 ### Development Process
 - Enforcing strict git workflow for all development work

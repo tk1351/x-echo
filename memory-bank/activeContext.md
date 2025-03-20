@@ -61,7 +61,8 @@ The current development focus is on implementing the core backend functionality 
    - ✅ Implementing tweet creation API
    - ✅ Adding validation for tweet content
    - ✅ Creating tests for tweet functionality
-   - Implementing tweet retrieval endpoints
+   - ✅ Implementing single tweet retrieval endpoint
+   - Implementing tweet list retrieval endpoints
 
 4. **Documentation**
    - Documenting the database architecture
@@ -93,7 +94,8 @@ The current development focus is on implementing the core backend functionality 
 
 1. **Tweet Functionality**
    - ✅ Implement tweet creation
-   - Add tweet retrieval (single and lists)
+   - ✅ Add tweet retrieval (single)
+   - Add tweet retrieval (lists)
    - Create timeline functionality
    - Implement tweet deletion
 

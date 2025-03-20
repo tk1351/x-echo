@@ -1,13 +1,15 @@
-import { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
 import { createTweet as createTweetRepo } from "../domain/tweet/tweetRepository.js";
-import type { Result } from "../utils/result.js";
 import type { TweetCreateInput, TweetResponse } from "../types/index.js";
 import { TweetErrorType } from "../utils/errors.js";
+import type { Result } from "../utils/result.js";
 
 export const createTweet = async (
   data: TweetCreateInput,
-  prisma: PrismaClient
-): Promise<Result<TweetResponse, { type: TweetErrorType; message: string }>> => {
+  prisma: PrismaClient,
+): Promise<
+  Result<TweetResponse, { type: TweetErrorType; message: string }>
+> => {
   // Validate content
   if (!data.content || data.content.trim().length === 0) {
     return {

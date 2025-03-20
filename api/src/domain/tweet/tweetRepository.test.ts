@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { createTweet } from "./tweetRepository.js";
+import { createTweet } from "./tweetRepository.ts";
 
 describe("tweetRepository", () => {
   describe("createTweet", () => {
@@ -20,14 +20,16 @@ describe("tweetRepository", () => {
       // Act
       const result = await createTweet(
         { content: "Test tweet", userId: 1 },
-        mockPrisma as any
+        mockPrisma as any,
       );
 
       // Assert
       expect(result.ok).toBe(true);
-      expect(result.value).toHaveProperty("id", 1);
-      expect(result.value).toHaveProperty("content", "Test tweet");
-      expect(result.value).toHaveProperty("userId", 1);
+      if (result.ok) {
+        expect(result.value).toHaveProperty("id", 1);
+        expect(result.value).toHaveProperty("content", "Test tweet");
+        expect(result.value).toHaveProperty("userId", 1);
+      }
       expect(mockPrisma.tweet.create).toHaveBeenCalledWith({
         data: {
           content: "Test tweet",
@@ -48,12 +50,14 @@ describe("tweetRepository", () => {
       // Act
       const result = await createTweet(
         { content: "Test tweet", userId: 1 },
-        mockPrisma as any
+        mockPrisma as any,
       );
 
       // Assert
       expect(result.ok).toBe(false);
-      expect(result.error).toBe(mockError);
+      if (!result.ok) {
+        expect(result.error).toBe(mockError);
+      }
     });
   });
 });

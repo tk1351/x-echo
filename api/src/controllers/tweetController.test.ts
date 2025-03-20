@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import { createTweet } from "./tweetController.js";
-import * as tweetService from "../services/tweetService.js";
-import { TweetErrorType } from "../utils/errors.js";
+import * as tweetService from "../services/tweetService.ts";
+import { TweetErrorType } from "../utils/errors.ts";
+import { createTweet } from "./tweetController.ts";
 
-vi.mock("../services/tweetService.js");
+vi.mock("../services/tweetService.ts");
 
 describe("tweetController", () => {
   describe("createTweet", () => {
@@ -24,7 +24,7 @@ describe("tweetController", () => {
         expect.objectContaining({
           error: "Validation error",
         }),
-        400
+        400,
       );
     });
 
@@ -44,7 +44,7 @@ describe("tweetController", () => {
       // Assert
       expect(mockContext.json).toHaveBeenCalledWith(
         { error: "認証情報が不足しています" },
-        401
+        401,
       );
     });
 
@@ -78,7 +78,7 @@ describe("tweetController", () => {
           content: "Valid content",
           userId: 1,
         },
-        expect.anything()
+        expect.anything(),
       );
       expect(mockContext.json).toHaveBeenCalledWith(mockTweet, 201);
     });
@@ -106,7 +106,7 @@ describe("tweetController", () => {
       // Assert
       expect(mockContext.json).toHaveBeenCalledWith(
         { error: "Invalid tweet data" },
-        400
+        400,
       );
     });
   });

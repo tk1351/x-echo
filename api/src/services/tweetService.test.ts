@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import { createTweet } from "./tweetService.js";
-import * as tweetRepository from "../domain/tweet/tweetRepository.js";
-import { TweetErrorType } from "../utils/errors.js";
+import * as tweetRepository from "../domain/tweet/tweetRepository.ts";
+import { TweetErrorType } from "../utils/errors.ts";
+import { createTweet } from "./tweetService.ts";
 
-vi.mock("../domain/tweet/tweetRepository.js");
+vi.mock("../domain/tweet/tweetRepository.ts");
 
 describe("tweetService", () => {
   describe("createTweet", () => {
@@ -16,18 +16,24 @@ describe("tweetService", () => {
       // Act
       const emptyResult = await createTweet(
         { content: emptyContent, userId: 1 },
-        mockPrisma
+        mockPrisma,
       );
       const tooLongResult = await createTweet(
         { content: tooLongContent, userId: 1 },
-        mockPrisma
+        mockPrisma,
       );
 
       // Assert
       expect(emptyResult.ok).toBe(false);
-      expect(emptyResult.error.type).toBe(TweetErrorType.INVALID_TWEET_DATA);
+      if (!emptyResult.ok) {
+        expect(emptyResult.error.type).toBe(TweetErrorType.INVALID_TWEET_DATA);
+      }
       expect(tooLongResult.ok).toBe(false);
-      expect(tooLongResult.error.type).toBe(TweetErrorType.INVALID_TWEET_DATA);
+      if (!tooLongResult.ok) {
+        expect(tooLongResult.error.type).toBe(
+          TweetErrorType.INVALID_TWEET_DATA,
+        );
+      }
     });
 
     it("should check if user exists", async () => {
@@ -41,12 +47,14 @@ describe("tweetService", () => {
       // Act
       const result = await createTweet(
         { content: "Valid content", userId: 999 },
-        mockPrisma
+        mockPrisma,
       );
 
       // Assert
       expect(result.ok).toBe(false);
-      expect(result.error.type).toBe(TweetErrorType.INVALID_TWEET_DATA);
+      if (!result.ok) {
+        expect(result.error.type).toBe(TweetErrorType.INVALID_TWEET_DATA);
+      }
       expect(mockPrisma.user.findUnique).toHaveBeenCalledWith({
         where: { id: 999 },
       });
@@ -74,15 +82,17 @@ describe("tweetService", () => {
       // Act
       const result = await createTweet(
         { content: "Valid content", userId: 1 },
-        mockPrisma
+        mockPrisma,
       );
 
       // Assert
       expect(result.ok).toBe(true);
-      expect(result.value).toEqual(mockTweet);
+      if (result.ok) {
+        expect(result.value).toEqual(mockTweet);
+      }
       expect(tweetRepository.createTweet).toHaveBeenCalledWith(
         { content: "Valid content", userId: 1 },
-        mockPrisma
+        mockPrisma,
       );
     });
 
@@ -101,12 +111,14 @@ describe("tweetService", () => {
       // Act
       const result = await createTweet(
         { content: "Valid content", userId: 1 },
-        mockPrisma
+        mockPrisma,
       );
 
       // Assert
       expect(result.ok).toBe(false);
-      expect(result.error.type).toBe(TweetErrorType.TWEET_CREATION_FAILED);
+      if (!result.ok) {
+        expect(result.error.type).toBe(TweetErrorType.TWEET_CREATION_FAILED);
+      }
     });
   });
 });

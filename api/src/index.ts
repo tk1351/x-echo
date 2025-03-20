@@ -1,8 +1,8 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import authRouter from "./routes/auth.js";
-import usersRouter from "./routes/users.js";
 import tweetsRouter from "./routes/tweets.js";
+import usersRouter from "./routes/users.js";
 
 const app = new Hono();
 

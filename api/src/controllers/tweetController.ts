@@ -48,7 +48,7 @@ export const createTweet = async (c: Context) => {
       content: data.content,
       userId: jwtPayload.userId,
     },
-    prisma
+    prisma,
   );
 
   if (!result.ok) {

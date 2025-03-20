@@ -37,6 +37,10 @@ The current development focus is on implementing the core backend functionality 
    - Added tweet creation functionality with validation
    - Implemented tweet repository, service, and controller
    - Created comprehensive tests for tweet creation
+   - Implemented tweet list retrieval functionality with cursor-based pagination
+   - Added user tweets retrieval endpoint and latest tweets retrieval endpoint
+   - Created database indexes for optimized tweet queries
+   - Implemented comprehensive tests for tweet list retrieval
 
 4. **Code Quality Improvements**
    - Removed unnecessary `else` clauses in `authController.ts` to improve code readability
@@ -62,7 +66,10 @@ The current development focus is on implementing the core backend functionality 
    - ✅ Adding validation for tweet content
    - ✅ Creating tests for tweet functionality
    - ✅ Implementing single tweet retrieval endpoint
-   - Implementing tweet list retrieval endpoints
+   - ✅ Implementing tweet list retrieval endpoints
+   - ✅ Adding cursor-based pagination for efficient data retrieval
+   - ✅ Implementing user tweets retrieval endpoint
+   - ✅ Implementing latest tweets retrieval endpoint
 
 4. **Documentation**
    - Documenting the database architecture
@@ -95,7 +102,7 @@ The current development focus is on implementing the core backend functionality 
 1. **Tweet Functionality**
    - ✅ Implement tweet creation
    - ✅ Add tweet retrieval (single)
-   - Add tweet retrieval (lists)
+   - ✅ Add tweet retrieval (lists)
    - Create timeline functionality
    - Implement tweet deletion
 

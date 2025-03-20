@@ -1,5 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
-import { createTweet as createTweetRepo } from "../domain/tweet/tweetRepository.js";
+import { createTweet as createTweetRepo, getTweetById as getTweetByIdRepo } from "../domain/tweet/tweetRepository.js";
 import type { TweetCreateInput, TweetResponse } from "../types/index.js";
 import { TweetErrorType } from "../utils/errors.js";
 import type { Result } from "../utils/result.js";
@@ -65,6 +65,45 @@ export const createTweet = async (
       error: {
         type: TweetErrorType.TWEET_CREATION_FAILED,
         message: "Failed to create tweet",
+      },
+    };
+  }
+
+  return { ok: true, value: result.value };
+};
+
+/**
+ * Retrieves a tweet by its ID
+ * @param id The ID of the tweet to retrieve
+ * @param prisma Prisma client instance
+ * @returns Result containing the tweet or an error
+ */
+export const getTweetById = async (
+  id: number,
+  prisma: PrismaClient,
+): Promise<
+  Result<TweetResponse, { type: TweetErrorType; message: string }>
+> => {
+  const result = await getTweetByIdRepo(id, prisma);
+
+  if (!result.ok) {
+    // Check if the error is a "not found" error
+    if (result.error.message.includes("not found")) {
+      return {
+        ok: false,
+        error: {
+          type: TweetErrorType.TWEET_NOT_FOUND,
+          message: `Tweet with id ${id} not found`,
+        },
+      };
+    }
+
+    // Handle other errors
+    return {
+      ok: false,
+      error: {
+        type: TweetErrorType.INTERNAL_ERROR,
+        message: "Failed to retrieve tweet",
       },
     };
   }

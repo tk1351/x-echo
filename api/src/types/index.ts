@@ -45,3 +45,18 @@ export type TweetResponse = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+// ツイートリストレスポンス型
+export type TweetListResponse = {
+  tweets: TweetResponse[];
+  pagination: {
+    hasMore: boolean;
+    nextCursor?: string; // 次ページのカーソル（最後のツイートのID）
+  };
+};
+
+// ページネーションパラメータ型
+export type PaginationParams = {
+  limit: number;
+  cursor?: number;
+};

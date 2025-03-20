@@ -41,7 +41,8 @@ export const ValidationErrorType = {
   INVALID_INPUT: "INVALID_INPUT",
 } as const satisfies Record<string, string>;
 
-export type ValidationErrorType = (typeof ValidationErrorType)[keyof typeof ValidationErrorType];
+export type ValidationErrorType =
+  (typeof ValidationErrorType)[keyof typeof ValidationErrorType];
 
 // バリデーションエラー
 export type ValidationError = {
@@ -56,9 +57,12 @@ export const TweetErrorType = {
   UNAUTHORIZED_ACTION: "UNAUTHORIZED_ACTION",
   TWEET_NOT_FOUND: "TWEET_NOT_FOUND",
   INTERNAL_ERROR: "INTERNAL_ERROR",
+  INVALID_PAGINATION_PARAMS: "INVALID_PAGINATION_PARAMS",
+  USER_NOT_FOUND: "USER_NOT_FOUND",
 } as const satisfies Record<string, string>;
 
-export type TweetErrorType = (typeof TweetErrorType)[keyof typeof TweetErrorType];
+export type TweetErrorType =
+  (typeof TweetErrorType)[keyof typeof TweetErrorType];
 
 // ツイートエラー
 export type TweetError = {

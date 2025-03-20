@@ -3,7 +3,9 @@ import { z } from "zod";
 import prisma from "../lib/prisma.js";
 import {
   createTweet as createTweetService,
+  getLatestTweets as getLatestTweetsService,
   getTweetById,
+  getTweetsByUsername,
 } from "../services/tweetService.js";
 import { TweetErrorType } from "../utils/errors.js";
 
@@ -92,6 +94,120 @@ export const getTweet = async (c: Context) => {
     switch (result.error.type) {
       case TweetErrorType.TWEET_NOT_FOUND:
         c.status(404);
+        return c.json({ error: result.error.message });
+      default:
+        c.status(500);
+        return c.json({ error: result.error.message });
+    }
+  }
+
+  c.status(200);
+  return c.json(result.value);
+};
+
+/**
+ * Controller to retrieve tweets by username
+ * @param c Hono context
+ * @returns JSON response
+ */
+export const getUserTweets = async (c: Context) => {
+  // Get username from URL parameter
+  const username = c.req.param("username");
+
+  // Get limit and cursor from query parameters
+  const limitParam = c.req.query("limit");
+  const cursorParam = c.req.query("cursor");
+
+  // Parse limit (default: 20)
+  const limit = limitParam ? Number.parseInt(limitParam, 10) : 20;
+  // Parse cursor (明示的に型を定義)
+  const cursor: number | undefined = cursorParam
+    ? Number.parseInt(cursorParam, 10)
+    : undefined;
+
+  // Validate limit
+  if (Number.isNaN(limit) || limit <= 0 || limit > 100) {
+    c.status(400);
+    return c.json({
+      error: "Invalid limit parameter. Must be between 1 and 100",
+    });
+  }
+
+  // Validate cursor
+  if (
+    cursorParam &&
+    (Number.isNaN(cursor) || (cursor !== undefined && cursor <= 0))
+  ) {
+    c.status(400);
+    return c.json({
+      error: "Invalid cursor parameter. Must be a positive integer",
+    });
+  }
+
+  // Retrieve tweets
+  const result = await getTweetsByUsername(username, limit, prisma, cursor);
+
+  if (!result.ok) {
+    switch (result.error.type) {
+      case TweetErrorType.USER_NOT_FOUND:
+        c.status(404);
+        return c.json({ error: result.error.message });
+      case TweetErrorType.INVALID_PAGINATION_PARAMS:
+        c.status(400);
+        return c.json({ error: result.error.message });
+      default:
+        c.status(500);
+        return c.json({ error: result.error.message });
+    }
+  }
+
+  c.status(200);
+  return c.json(result.value);
+};
+
+/**
+ * Controller to retrieve latest tweets
+ * @param c Hono context
+ * @returns JSON response
+ */
+export const getLatestTweets = async (c: Context) => {
+  // Get limit and cursor from query parameters
+  const limitParam = c.req.query("limit");
+  const cursorParam = c.req.query("cursor");
+
+  // Parse limit (default: 20)
+  const limit = limitParam ? Number.parseInt(limitParam, 10) : 20;
+  // Parse cursor (明示的に型を定義)
+  const cursor: number | undefined = cursorParam
+    ? Number.parseInt(cursorParam, 10)
+    : undefined;
+
+  // Validate limit
+  if (Number.isNaN(limit) || limit <= 0 || limit > 100) {
+    c.status(400);
+    return c.json({
+      error: "Invalid limit parameter. Must be between 1 and 100",
+    });
+  }
+
+  // Validate cursor
+  if (
+    cursorParam &&
+    (Number.isNaN(cursor) || (cursor !== undefined && cursor <= 0))
+  ) {
+    c.status(400);
+    return c.json({
+      error: "Invalid cursor parameter. Must be a positive integer",
+    });
+  }
+
+  // Retrieve latest tweets
+  const result = await getLatestTweetsService(limit, prisma, cursor);
+
+  if (!result.ok) {
+    switch (result.error.type) {
+      case TweetErrorType.INVALID_PAGINATION_PARAMS:
+        c.status(400);
         return c.json({ error: result.error.message });
       default:
         c.status(500);

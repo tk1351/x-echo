@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { getUserTweets } from "../controllers/tweetController.js";
 import {
   getUserProfile,
   registerUser,
@@ -16,5 +17,8 @@ usersRouter.get("/:username", getUserProfile);
 
 // ユーザープロファイル更新エンドポイント（認証が必要）
 usersRouter.put("/profile", authenticate, updateUserProfile);
+
+// ユーザーのツイート一覧取得エンドポイント
+usersRouter.get("/:username/tweets", getUserTweets);
 
 export default usersRouter;

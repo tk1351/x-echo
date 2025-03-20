@@ -1,4 +1,5 @@
-import type { Role, User } from "@prisma/client";
+import type { User } from "@prisma/client";
+import type { Role } from "./role.js";
 
 // ブランド型
 type Branded<T, B> = T & { _brand: B };

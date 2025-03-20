@@ -8,6 +8,7 @@ X-Echo is a clone of Twitter (now X). Users can create accounts, log in, and pos
 
 ## Key Features
 - User registration and login
+- User profile management
 - Tweet posting
 - User following
 - Favorites (likes)

@@ -30,6 +30,12 @@ X-Echo is designed to replicate the core functionality of Twitter (now X), provi
 4. User logs in with credentials
 5. System authenticates and provides access
 
+### User Profile Management
+1. User views their own or other users' profiles
+2. Profile displays user information (username, display name, bio, etc.)
+3. Authenticated users can update their own profile information
+4. System validates profile updates and applies changes
+
 ### Tweet Creation and Interaction
 1. User creates a new tweet with text content
 2. Tweet appears in the user's profile and followers' timelines

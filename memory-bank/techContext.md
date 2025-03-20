@@ -107,17 +107,17 @@ enum Role {
 
 Additional models for Follow, Tweet, Favorite, and Retweet will be implemented as the project progresses.
 
-## API Endpoints (Planned)
+## API Endpoints
 
 ### Authentication
-- `POST /api/users/register` - Register a new user
-- `POST /api/auth/login` - Authenticate a user
-- `POST /api/auth/logout` - Log out a user
-- `GET /api/auth/me` - Get current user information
+- ✅ `POST /api/users/register` - Register a new user
+- ✅ `POST /api/auth/login` - Authenticate a user
+- ✅ `POST /api/auth/logout` - Log out a user
+- ✅ `GET /api/auth/me` - Get current user information
 
 ### Users
-- `GET /api/users/:username` - Get user profile
-- `PUT /api/users/:username` - Update user profile
+- ✅ `GET /api/users/:username` - Get user profile
+- ✅ `PUT /api/users/profile` - Update user profile (authenticated user)
 - `GET /api/users/:username/followers` - Get user followers
 - `GET /api/users/:username/following` - Get users being followed
 

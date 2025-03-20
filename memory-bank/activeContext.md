@@ -2,7 +2,7 @@
 
 ## Current Focus
 
-The current development focus is on implementing the core backend functionality for X-Echo, with an emphasis on user management and authentication. The project is in its early stages, with the basic project structure and database schema established. User registration functionality has been implemented.
+The current development focus is on implementing the core backend functionality for X-Echo, with an emphasis on user management, authentication, and profile management. The project is in its early stages, with the basic project structure and database schema established. User registration, authentication, and profile management functionality has been implemented.
 
 ## Recent Changes
 
@@ -14,6 +14,7 @@ The current development focus is on implementing the core backend functionality 
 
 2. **Database Schema**
    - Defined the User model in Prisma schema
+   - Added TokenBlacklist model for JWT token management
    - Planned additional models for Follow, Tweet, Favorite, and Retweet
 
 3. **API Development**
@@ -22,15 +23,31 @@ The current development focus is on implementing the core backend functionality 
    - Implemented user registration API with validation and error handling
    - Added password hashing with bcrypt
    - Created comprehensive tests for user registration
+   - Implemented domain-driven design with repository pattern
+   - Added token service using Hono JWT helper for authentication
+   - Implemented login, token refresh, and logout functionality
+   - Created token blacklist repository for secure logout
+   - Added authentication routes for login, refresh, and logout
+   - Implemented authentication middleware for protected routes
+   - Added current user information retrieval endpoint
+   - Implemented user profile retrieval endpoint
+   - Added user profile update functionality with validation
+   - Created integration tests for profile endpoints
 
 ## Current Tasks
 
 1. **Authentication System**
-   - Implementing login functionality
-   - Setting up JWT-based authentication
-   - Creating protected routes
+   - ✅ Implementing login functionality
+   - ✅ Setting up JWT-based authentication
+   - ✅ Creating authentication routes
+   - ✅ Implementing authentication middleware for protected routes
 
-2. **Documentation**
+2. **User Profile Management**
+   - ✅ Implementing user profile retrieval
+   - ✅ Adding profile update functionality
+   - ✅ Creating validation for profile data
+
+3. **Documentation**
    - Documenting the database architecture
    - Creating implementation plans for user-related features
    - Establishing coding standards and patterns
@@ -41,13 +58,14 @@ The current development focus is on implementing the core backend functionality 
 
 1. **Authentication System**
    - ✅ Complete user registration API
-   - Implement login functionality
-   - Add JWT-based authentication
-   - Create protected routes
+   - ✅ Implement login functionality
+   - ✅ Add JWT-based authentication
+   - ✅ Create authentication routes
+   - ✅ Implement authentication middleware for protected routes
 
 2. **User Profile Management**
-   - Implement user profile retrieval
-   - Add profile update functionality
+   - ✅ Implement user profile retrieval
+   - ✅ Add profile update functionality
    - Create user search capabilities
 
 3. **Follow Functionality**
@@ -77,8 +95,9 @@ The current development focus is on implementing the core backend functionality 
 ### Technical Considerations
 
 1. **Authentication Strategy**
-   - Evaluating JWT vs. session-based authentication
-   - Considering refresh token implementation
+   - ✅ Implemented JWT-based authentication
+   - ✅ Implemented refresh token functionality
+   - ✅ Implemented token blacklist for secure logout
    - Planning for secure password reset flow
 
 2. **Performance Optimization**
@@ -107,3 +126,14 @@ The current development focus is on implementing the core backend functionality 
    - How to handle increasing user load
    - Strategies for database scaling
    - Caching implementation for performance
+
+### Current Issues
+
+1. **TypeScript Type Errors in Tests**
+   - Vitest mock function type definitions causing TypeScript errors in `authController.test.ts`
+   - Specific errors include:
+     - `Property 'mockResolvedValueOnce' does not exist on type '<T = any>() => Promise<T>'`
+     - `Property 'mockRejectedValueOnce' does not exist on type '<T = any>() => Promise<T>'`
+     - `Property 'mockReturnValueOnce' does not exist on type '{ (name: RequestHeader): string | undefined; ... }'`
+   - Tests run successfully despite these type errors
+   - Fixing would require extending Vitest's type definitions

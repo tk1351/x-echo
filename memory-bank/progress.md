@@ -2,7 +2,7 @@
 
 ## Current Status
 
-The X-Echo project is in the early development phase, with the focus on establishing the foundation for the backend API. The project structure has been set up, and the database schema has been partially defined. User registration functionality has been implemented.
+The X-Echo project is in the early development phase, with the focus on establishing the foundation for the backend API. The project structure has been set up, and the database schema has been partially defined. User registration, authentication, and profile management functionality has been implemented.
 
 ### Project Timeline
 - **Project Start**: Initial setup and planning
@@ -20,6 +20,7 @@ The X-Echo project is in the early development phase, with the focus on establis
 
 ### Database
 - ✅ User model defined in Prisma schema
+- ✅ TokenBlacklist model added for JWT token management
 - ✅ Prisma client setup for database access
 
 ### API
@@ -29,11 +30,30 @@ The X-Echo project is in the early development phase, with the focus on establis
 - ✅ Password hashing with bcrypt
 - ✅ Input validation with Zod
 - ✅ Error handling for registration process
+- ✅ Domain-driven design with repository pattern implemented
+- ✅ Token service using Hono JWT helper
+- ✅ Login API implemented
+- ✅ Token refresh API implemented
+- ✅ Logout API implemented
+- ✅ Token blacklist for secure logout
+- ✅ Authentication middleware for protected routes
+- ✅ Current user information retrieval endpoint
+- ✅ User profile retrieval endpoint implemented
+- ✅ User profile update endpoint implemented (with authentication)
+- ✅ Profile data validation with Zod
 
 ### Testing
 - ✅ Testing infrastructure set up with Vitest
 - ✅ Unit tests for user registration implemented
 - ✅ Test coverage for user service and controller
+- ✅ Unit tests for user repository implemented
+- ✅ Unit tests for token service implemented
+- ✅ Unit tests for token blacklist repository implemented
+- ✅ Unit tests for authentication service implemented
+- ✅ Unit tests for authentication controller implemented
+- ✅ Unit tests for authentication middleware implemented
+- ✅ Unit tests for user profile controller implemented
+- ✅ Integration tests for user profile endpoints implemented
 
 ### Documentation
 - ✅ Database architecture documentation
@@ -42,10 +62,8 @@ The X-Echo project is in the early development phase, with the focus on establis
 
 ## What's In Progress
 
-### Authentication
-- 🔄 User login functionality
-- 🔄 JWT token generation and validation
-- 🔄 Protected routes middleware
+### Follow Functionality
+- 🔄 Follow/unfollow functionality planning
 
 ## What's Left to Build
 
@@ -53,7 +71,7 @@ The X-Echo project is in the early development phase, with the focus on establis
 - ❌ Password reset functionality
 
 ### User Interactions
-- ❌ User profile management
+- ✅ User profile management
 - ❌ Follow/unfollow functionality
 - ❌ Follower/following lists
 
@@ -80,7 +98,19 @@ The X-Echo project is in the early development phase, with the focus on establis
 ### Technical Debt
 1. **Error Handling**: Need to implement a consistent error handling strategy across the API
 2. **Validation**: Need to establish standardized validation patterns for all endpoints
-3. **Testing**: Test coverage is currently focused on user registration and needs expansion
+3. **Testing**: Test coverage is currently focused on user registration and authentication and needs expansion
+4. **TypeScript Type Errors in Tests**: Vitest mock function type definitions causing TypeScript errors in tests
+   - Specific errors include:
+     - `Property 'mockResolvedValueOnce' does not exist on type '<T = any>() => Promise<T>'`
+     - `Property 'mockRejectedValueOnce' does not exist on type '<T = any>() => Promise<T>'`
+     - `Property 'mockReturnValueOnce' does not exist on type '{ (name: RequestHeader): string | undefined; ... }'`
+   - Tests run successfully despite these type errors
+   - Fixing would require extending Vitest's type definitions
+
+### Resolved Issues
+1. **Authentication Controller Response Format**: Fixed response format in `authController.ts` to use `c.status(statusCode); c.json(data);` instead of `c.json(data, statusCode)`
+2. **JWT Payload Type Definition**: Corrected `JwtPayload` type to use `Role` enum instead of `string` for the `role` property
+3. **Test Code Consistency**: Updated test code to use `Role.USER` enum value instead of `"USER"` string
 
 ### Blockers
 1. **None currently**: No critical blockers at this stage
@@ -94,8 +124,8 @@ The X-Echo project is in the early development phase, with the focus on establis
 
 ### Milestone 1: User Management (In Progress)
 - ✅ User registration
-- User authentication
-- User profile management
+- ✅ User authentication (login, token refresh, logout)
+- ✅ User profile management
 - Follow functionality
 
 **Target Completion**: TBD
@@ -124,7 +154,7 @@ The X-Echo project is in the early development phase, with the focus on establis
 
 ### Test Coverage
 - Target: > 80% code coverage
-- Current: User registration functionality has good coverage
+- Current: User registration and authentication functionality has good coverage
 
 ### Code Quality
 - Using Biome for linting and formatting

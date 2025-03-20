@@ -132,6 +132,13 @@ erDiagram
         datetime updatedAt
     }
 
+    TOKEN_BLACKLIST {
+        int id PK
+        string token
+        datetime expiresAt
+        datetime createdAt
+    }
+
     FOLLOW {
         int id PK
         int followerId FK
@@ -210,7 +217,8 @@ erDiagram
 
 ### Authentication
 - Password hashing with bcrypt
-- JWT-based authentication (planned)
+- JWT-based authentication with Hono JWT helper
+- Token blacklisting for logout and security
 - Role-based access control
 
 ### Data Protection

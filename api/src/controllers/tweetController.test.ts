@@ -401,7 +401,7 @@ describe("tweetController", () => {
         ok: false,
         error: {
           type: TweetErrorType.INVALID_PAGINATION_PARAMS,
-          message: "Invalid pagination parameters",
+          message: "Limit must be between 1 and 100",
         },
       });
 
@@ -410,9 +410,11 @@ describe("tweetController", () => {
 
       // Assert
       expect(mockContext.status).toHaveBeenCalledWith(400);
-      expect(mockContext.json).toHaveBeenCalledWith({
-        error: "Invalid pagination parameters",
-      });
+      expect(mockContext.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          error: "Invalid limit parameter. Must be between 1 and 100",
+        }),
+      );
     });
   });
 });

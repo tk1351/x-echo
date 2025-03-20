@@ -48,7 +48,7 @@ describe("認証ミドルウェア", () => {
   describe("authenticate", () => {
     it("Authorizationヘッダーがない場合は401エラーを返す", async () => {
       // Authorizationヘッダーなし
-      mockHeaders["Authorization"] = undefined;
+      mockHeaders.Authorization = undefined;
 
       const result = await authenticate(mockContext, mockNext);
 
@@ -67,7 +67,7 @@ describe("認証ミドルウェア", () => {
 
     it("Authorizationヘッダーが'Bearer 'で始まらない場合は401エラーを返す", async () => {
       // 不正なフォーマットのAuthorizationヘッダー
-      mockHeaders["Authorization"] = "InvalidFormat token123";
+      mockHeaders.Authorization = "InvalidFormat token123";
 
       const result = await authenticate(mockContext, mockNext);
 
@@ -86,7 +86,7 @@ describe("認証ミドルウェア", () => {
 
     it("トークンがブラックリストに登録されている場合は401エラーを返す", async () => {
       // 有効なAuthorizationヘッダー
-      mockHeaders["Authorization"] = "Bearer validToken";
+      mockHeaders.Authorization = "Bearer validToken";
 
       // ブラックリストチェックが成功し、トークンがブラックリストに登録されている
       vi.mocked(tokenBlacklistRepository.isTokenBlacklisted).mockResolvedValue({
@@ -115,7 +115,7 @@ describe("認証ミドルウェア", () => {
 
     it("ブラックリストチェックでエラーが発生した場合は500エラーを返す", async () => {
       // 有効なAuthorizationヘッダー
-      mockHeaders["Authorization"] = "Bearer validToken";
+      mockHeaders.Authorization = "Bearer validToken";
 
       // ブラックリストチェックでエラー
       const mockError = {
@@ -140,7 +140,7 @@ describe("認証ミドルウェア", () => {
 
     it("トークン検証でエラーが発生した場合は401エラーを返す", async () => {
       // 有効なAuthorizationヘッダー
-      mockHeaders["Authorization"] = "Bearer validToken";
+      mockHeaders.Authorization = "Bearer validToken";
 
       // ブラックリストチェックが成功し、トークンはブラックリストに登録されていない
       vi.mocked(tokenBlacklistRepository.isTokenBlacklisted).mockResolvedValue({
@@ -168,7 +168,7 @@ describe("認証ミドルウェア", () => {
 
     it("有効なトークンの場合はペイロードをコンテキストに設定し次のミドルウェアに進む", async () => {
       // 有効なAuthorizationヘッダー
-      mockHeaders["Authorization"] = "Bearer validToken";
+      mockHeaders.Authorization = "Bearer validToken";
 
       // ブラックリストチェックが成功し、トークンはブラックリストに登録されていない
       vi.mocked(tokenBlacklistRepository.isTokenBlacklisted).mockResolvedValue({

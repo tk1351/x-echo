@@ -1,4 +1,4 @@
-import { Role } from "@prisma/client";
+import { Role } from "../types/role.js";
 import type { Context } from "hono";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import * as userRepository from "../domain/user/userRepository.js";

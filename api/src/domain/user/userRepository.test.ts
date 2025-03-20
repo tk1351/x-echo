@@ -139,4 +139,126 @@ describe("userRepository", () => {
       }
     });
   });
+
+  describe("findUserByUsername", () => {
+    beforeEach(() => {
+      mockPrisma.user.findUnique = vi.fn();
+    });
+
+    it("should return user when found by username", async () => {
+      // Arrange
+      mockPrisma.user.findUnique.mockResolvedValue(mockUser);
+
+      // Act
+      const result = await findUserByUsername("testuser", mockPrisma as PrismaClient);
+
+      // Assert
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toEqual(mockUser);
+      }
+      expect(mockPrisma.user.findUnique).toHaveBeenCalledWith({
+        where: { username: "testuser" },
+      });
+    });
+
+    it("should return error when user not found", async () => {
+      // Arrange
+      mockPrisma.user.findUnique.mockResolvedValue(null);
+
+      // Act
+      const result = await findUserByUsername("nonexistent", mockPrisma as PrismaClient);
+
+      // Assert
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.type).toBe(UserErrorType.USER_NOT_FOUND);
+        expect(result.error.message).toBe("ユーザーが見つかりません");
+      }
+    });
+
+    it("should return error when database throws error", async () => {
+      // Arrange
+      mockPrisma.user.findUnique.mockRejectedValue(new Error("Database error"));
+
+      // Act
+      const result = await findUserByUsername("testuser", mockPrisma as PrismaClient);
+
+      // Assert
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.type).toBe(UserErrorType.INTERNAL_ERROR);
+      }
+    });
+  });
+
+  describe("updateUser", () => {
+    beforeEach(() => {
+      mockPrisma.user.update = vi.fn();
+    });
+
+    it("should update user successfully", async () => {
+      // Arrange
+      const userId = 1;
+      const updateData: UserUpdateData = {
+        displayName: "Updated Name",
+        bio: "Updated bio",
+      };
+      const updatedUser = {
+        ...mockUser,
+        displayName: "Updated Name",
+        bio: "Updated bio",
+      };
+      mockPrisma.user.update.mockResolvedValue(updatedUser);
+
+      // Act
+      const result = await updateUser(userId, updateData, mockPrisma as PrismaClient);
+
+      // Assert
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toEqual(updatedUser);
+      }
+      expect(mockPrisma.user.update).toHaveBeenCalledWith({
+        where: { id: userId },
+        data: updateData,
+      });
+    });
+
+    it("should return error when user not found", async () => {
+      // Arrange
+      const userId = 999;
+      const updateData: UserUpdateData = {
+        displayName: "Updated Name",
+      };
+      mockPrisma.user.update.mockRejectedValue(new Error("Record to update not found"));
+
+      // Act
+      const result = await updateUser(userId, updateData, mockPrisma as PrismaClient);
+
+      // Assert
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.type).toBe(UserErrorType.USER_NOT_FOUND);
+      }
+    });
+
+    it("should return error when database throws error", async () => {
+      // Arrange
+      const userId = 1;
+      const updateData: UserUpdateData = {
+        displayName: "Updated Name",
+      };
+      mockPrisma.user.update.mockRejectedValue(new Error("Database error"));
+
+      // Act
+      const result = await updateUser(userId, updateData, mockPrisma as PrismaClient);
+
+      // Assert
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.type).toBe(UserErrorType.INTERNAL_ERROR);
+      }
+    });
+  });
 });

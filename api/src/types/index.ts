@@ -32,3 +32,16 @@ export type UserProfileResponse = {
   isVerified: boolean;
   createdAt: Date;
 };
+
+export type TweetCreateInput = {
+  content: string;
+  userId: number;
+};
+
+export type TweetResponse = {
+  id: number;
+  content: string;
+  userId: number;
+  createdAt: Date;
+  updatedAt: Date;
+};

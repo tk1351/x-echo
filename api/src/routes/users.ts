@@ -1,6 +1,12 @@
 import { Hono } from "hono";
 import { getUserTweets } from "../controllers/tweetController.js";
 import {
+  followUserController,
+  getUserFollowersController,
+  getUserFollowingController,
+  unfollowUserController,
+} from "../controllers/followController.js";
+import {
   getUserProfile,
   registerUser,
   updateUserProfile,
@@ -20,5 +26,11 @@ usersRouter.put("/profile", authenticate, updateUserProfile);
 
 // ユーザーのツイート一覧取得エンドポイント
 usersRouter.get("/:username/tweets", getUserTweets);
+
+// フォロー関連のエンドポイント
+usersRouter.post("/:username/follow", authenticate, followUserController);
+usersRouter.delete("/:username/follow", authenticate, unfollowUserController);
+usersRouter.get("/:username/followers", getUserFollowersController);
+usersRouter.get("/:username/following", getUserFollowingController);
 
 export default usersRouter;

@@ -56,6 +56,18 @@ model Tweet {
   @@map("tweets")
 }
 
+model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+  @@map("follows")
+}
+
 enum Role {
   USER
   ADMIN

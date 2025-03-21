@@ -69,3 +69,20 @@ export type TweetError = {
   type: TweetErrorType;
   message: string;
 };
+
+// フォローエラータイプ
+export const FollowErrorType = {
+  ALREADY_FOLLOWING: "ALREADY_FOLLOWING",
+  NOT_FOLLOWING: "NOT_FOLLOWING",
+  CANNOT_FOLLOW_SELF: "CANNOT_FOLLOW_SELF",
+  FOLLOW_NOT_FOUND: "FOLLOW_NOT_FOUND",
+  INTERNAL_ERROR: "INTERNAL_ERROR",
+} as const satisfies Record<string, string>;
+
+export type FollowErrorType = (typeof FollowErrorType)[keyof typeof FollowErrorType];
+
+// フォローエラー
+export type FollowError = {
+  type: FollowErrorType;
+  message: string;
+};

@@ -41,6 +41,12 @@ The current development focus is on implementing the core backend functionality 
    - Added user tweets retrieval endpoint and latest tweets retrieval endpoint
    - Created database indexes for optimized tweet queries
    - Implemented comprehensive tests for tweet list retrieval
+   - Implemented Follow model in Prisma schema
+   - Added follow/unfollow functionality with validation
+   - Implemented follow repository, service, and controller
+   - Added follow status checking functionality
+   - Implemented follower/following list retrieval with pagination
+   - Added follow-related endpoints to the API
 
 4. **Code Quality Improvements**
    - Removed unnecessary `else` clauses in `authController.ts` to improve code readability
@@ -93,9 +99,9 @@ The current development focus is on implementing the core backend functionality 
    - Create user search capabilities
 
 3. **Follow Functionality**
-   - Implement follow/unfollow API
-   - Update follower/following counts
-   - Create API for retrieving followers/following lists
+   - ✅ Implement follow/unfollow API
+   - ✅ Update follower/following counts
+   - ✅ Create API for retrieving followers/following lists
 
 ### Medium-term (Next 1-2 Months)
 

@@ -50,6 +50,11 @@ The X-Echo project is in the early development phase, with the focus on establis
 - ✅ User tweets retrieval endpoint implemented (with pagination)
 - ✅ Latest tweets retrieval endpoint implemented (with pagination)
 - ✅ Cursor-based pagination for efficient data retrieval
+- ✅ Follow/unfollow API implemented (with authentication)
+- ✅ Follow status validation (already following, not following, cannot follow self)
+- ✅ Follower/following counts update on follow/unfollow
+- ✅ Follower list retrieval endpoint implemented (with pagination)
+- ✅ Following list retrieval endpoint implemented (with pagination)
 
 ### Testing
 - ✅ Testing infrastructure set up with Vitest
@@ -75,7 +80,12 @@ The X-Echo project is in the early development phase, with the focus on establis
 ## What's In Progress
 
 ### Follow Functionality
-- 🔄 Follow/unfollow functionality planning
+- ✅ Follow model defined in Prisma schema
+- ✅ Follow repository implemented
+- ✅ Follow service implemented
+- ✅ Follow controller implemented
+- ✅ Follow/unfollow API endpoints implemented
+- ✅ Follower/following list retrieval endpoints implemented
 
 ## What's Left to Build
 
@@ -84,8 +94,8 @@ The X-Echo project is in the early development phase, with the focus on establis
 
 ### User Interactions
 - ✅ User profile management
-- ❌ Follow/unfollow functionality
-- ❌ Follower/following lists
+- ✅ Follow/unfollow functionality
+- ✅ Follower/following lists
 
 ### Tweet Functionality
 - ✅ Tweet creation
@@ -136,11 +146,11 @@ The X-Echo project is in the early development phase, with the focus on establis
 
 ## Milestones and Targets
 
-### Milestone 1: User Management (In Progress)
+### Milestone 1: User Management (Completed)
 - ✅ User registration
 - ✅ User authentication (login, token refresh, logout)
 - ✅ User profile management
-- Follow functionality
+- ✅ Follow functionality
 
 **Target Completion**: TBD
 

@@ -13,7 +13,15 @@ Full-stack engineer proficient in using Hono.
   - prisma
   - biome
 - Frontend (under client directory)
-  - To be built in the future
+  - next.js
+  - typescript
+  - tailwind css
+  - css modules
+  - swr
+  - zustand
+  - vitest
+  - react testing library
+  - biome
 - Database
   - postgresql
   - docker
@@ -28,12 +36,14 @@ Users can favorite and retweet other users' tweets.
 
 We use the postgres container described in compose.yaml as the database.
 We connect to that postgres container with prisma, and write an API that returns data according to the routing configured in the backend.
-The frontend sends requests to that API and renders in the browser. (The frontend will be built in the future)
+The frontend, built with Next.js, sends requests to that API and renders in the browser with SSR capabilities for improved performance and SEO.
 
 ### How to Launch the Project
 
 1. Run npm run dev in the api directory
-2. Access http://localhost:8080
+2. Access the API at http://localhost:8080
+3. Run npm run dev in the client directory
+4. Access the frontend at http://localhost:3000
 
 ## Expected Response
 
@@ -135,6 +145,15 @@ type Email = Branded<string, "Email">;
 
 - Mock parts using Prisma so that they don't access the actual database
 - Mock parts dependent on external APIs so that actual requests do not occur
+- Run the command "npm run test {target file}"
+
+### client directory
+
+- Use React Testing Library for component testing
+- Mock API calls and external dependencies
+- Test pure functions and custom hooks separately
+- Use Playwright for critical E2E tests
+- Maintain high test coverage (90%+ for business logic, 80%+ for UI components)
 - Run the command "npm run test {target file}"
 
 ## Directory Structure Rules

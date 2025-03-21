@@ -15,8 +15,13 @@
 - **DBMS**: PostgreSQL - Advanced open-source relational database
 - **Containerization**: Docker - For consistent database environment
 
-### Frontend (planned)
-- To be implemented in the future
+### Frontend (client directory)
+- **Framework**: Next.js - React framework with built-in SSR capabilities
+- **Language**: TypeScript - Same as backend for consistency
+- **Styling**: Tailwind CSS + CSS Modules - For SSR-compatible styling
+- **State Management**: SWR for server state, Zustand for client state
+- **Testing**: Vitest + React Testing Library - Consistent with backend
+- **Linting/Formatting**: Biome - Same as backend for consistency
 
 ## Development Environment
 
@@ -41,11 +46,19 @@
    ```bash
    npx prisma migrate dev
    ```
-5. Start the development server:
+5. Start the backend development server:
    ```bash
    npm run dev
    ```
 6. Access the API at http://localhost:8080
+
+7. For frontend development (once implemented):
+   ```bash
+   cd client
+   npm install
+   npm run dev
+   ```
+8. Access the frontend at http://localhost:3000
 
 ## Project Structure
 
@@ -65,7 +78,20 @@
 │   │   └── utils/        # Utility functions
 │   ├── package.json      # Dependencies and scripts
 │   └── tsconfig.json     # TypeScript configuration
-├── client/               # Frontend (future implementation)
+├── client/               # Frontend (Next.js)
+│   ├── app/              # Next.js App Router
+│   │   ├── layout.tsx    # Root layout
+│   │   ├── page.tsx      # Home page
+│   │   ├── auth/         # Authentication pages
+│   │   ├── users/        # User profile pages
+│   │   └── tweets/       # Tweet-related pages
+│   ├── components/       # Shared components
+│   │   ├── ui/           # UI components
+│   │   └── layout/       # Layout components
+│   ├── lib/              # Utility functions
+│   ├── hooks/            # Custom hooks
+│   ├── store/            # State management
+│   └── types/            # TypeScript types
 ├── docs/                 # Documentation
 │   ├── applications/     # Application-specific documentation
 │   ├── libraries/        # Library-specific documentation
@@ -180,10 +206,20 @@ Additional models for Follow, Tweet, Favorite, and Retweet will be implemented a
 - Main branch should always be in a deployable state
 
 ### Testing Strategy
+
+#### Backend Testing
 - Unit tests for business logic
 - Integration tests for API endpoints
 - Mock external dependencies for testing
 - Test coverage targets for critical code paths
+
+#### Frontend Testing
+- Unit tests for pure functions and custom hooks
+- Component tests using React Testing Library
+- Integration tests for page-level functionality
+- E2E tests for critical user flows using Playwright
+- Test coverage targets: 90%+ for business logic, 80%+ for UI components
+- TDD approach consistent with backend development
 
 ## Deployment Considerations (Future)
 

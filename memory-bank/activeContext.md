@@ -144,9 +144,12 @@ The current development focus is on implementing the core backend functionality 
 ### Open Questions
 
 1. **Frontend Strategy**
-   - When to begin frontend implementation
-   - Which frontend framework to use
-   - How to structure the frontend codebase
+   - ✅ Selected Next.js as the frontend framework for its SSR capabilities and developer experience
+   - ✅ Decided on Tailwind CSS + CSS Modules for styling with SSR compatibility
+   - ✅ Chosen SWR for server state and Zustand for client state management
+   - ✅ Established testing strategy using Vitest + React Testing Library
+   - ✅ Defined frontend project structure following Next.js App Router conventions
+   - Planning frontend implementation timeline and feature prioritization
 
 2. **Deployment Considerations**
    - Containerization strategy for production

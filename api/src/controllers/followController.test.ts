@@ -6,7 +6,7 @@ import {
   getUserFollowersController,
   getUserFollowingController,
   unfollowUserController,
-} from "./followController.js";
+} from "./followController.ts";
 
 // Mock the followService
 vi.mock("../services/followService.js", () => ({

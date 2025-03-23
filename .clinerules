@@ -164,6 +164,38 @@ api/  # API
 client/ # Frontend
 ```
 
+## Next.js Component Patterns
+
+### Server Components vs Client Components
+
+#### Server Components Use Cases
+- Data fetching
+- Direct access to backend resources
+- Keeping sensitive information on the server (access tokens, API keys, etc.)
+- Reducing client-side JavaScript by keeping large dependencies on the server
+
+#### Client Components Use Cases
+- Interactive features and event listeners (onClick(), onChange(), etc.)
+- State and lifecycle effects (useState(), useReducer(), useEffect(), etc.)
+- Browser-only APIs
+- Custom hooks that depend on state, effects, or browser-only APIs
+- React class components
+
+### Composition Patterns
+
+#### Recommended Patterns
+- Move Client Components down the component tree
+- Pass Server Components as children to Client Components
+- Implement common layout elements as Server Components and only interactive parts as Client Components
+
+#### Patterns to Avoid
+- Directly importing Server Components into Client Components (pass as props instead)
+- Unnecessarily using Client Components (consider performance impact)
+
+### File Structure
+- Server Components: All components are Server Components by default
+- Client Components: Add the 'use client' directive at the top of the file
+
 ## Test-Driven Development (TDD) Basics
 
 ### Basic Concepts

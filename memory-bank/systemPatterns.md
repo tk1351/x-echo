@@ -282,3 +282,52 @@ flowchart TD
 - Counter caching in database
 - Response caching (planned)
 - Query result caching (planned)
+
+## Frontend Architecture
+
+### Next.js Component Architecture
+
+```mermaid
+graph TD
+    RootLayout[Root Layout - Server Component] --> Layout[Page Layout - Server Component]
+    Layout --> Page[Page - Server Component]
+    Page --> DataFetching[Data Fetching Components - Server]
+    Page --> Interactive[Interactive Components - Client]
+    Interactive --> ServerChild[Server Component as Child]
+```
+
+### Server/Client Component Composition Patterns
+
+#### Recommended Pattern: Passing Server Components as Children to Client Components
+
+```typescript
+// page.tsx (Server Component)
+import ClientComponent from './client-component'
+import ServerComponent from './server-component'
+
+export default function Page() {
+  return (
+    <ClientComponent>
+      <ServerComponent />
+    </ClientComponent>
+  )
+}
+```
+
+#### Pattern to Avoid: Directly Importing Server Components into Client Components
+
+```typescript
+'use client'
+// This pattern is not supported
+import ServerComponent from './server-component'
+
+export default function ClientComponent() {
+  const [count, setCount] = useState(0)
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>{count}</button>
+      <ServerComponent />
+    </>
+  )
+}
+```

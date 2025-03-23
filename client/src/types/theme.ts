@@ -2,7 +2,7 @@
  * テーマの型定義
  * ライト、ダーク、システム設定に基づくテーマを表します
  */
-export type Theme = 'light' | 'dark' | 'system';
+export type Theme = "light" | "dark" | "system";
 
 /**
  * テーマプロバイダーの状態の型定義

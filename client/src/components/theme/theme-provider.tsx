@@ -15,7 +15,7 @@ const initialState: ThemeProviderState = {
 /**
  * テーマプロバイダーのコンテキスト
  */
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
+const ThemeProviderContext = createContext<ThemeProviderState | undefined>(undefined)
 
 /**
  * テーマプロバイダーのプロパティ

@@ -1,5 +1,316 @@
 # Frontend Development Patterns
 
+## Design System
+
+The X-Echo design system provides a foundation for consistent user experience and efficient development, focusing on mobile-first design, dark mode support, and web accessibility compliance.
+
+### Design System Structure
+
+```mermaid
+graph TD
+    A[Design System] --> B[Design Tokens]
+    A --> D[Patterns]
+
+    B --> B1[Colors]
+    B --> B2[Typography]
+    B --> B3[Spacing]
+    B --> B4[Breakpoints]
+    B --> B5[Animation]
+
+    D --> D1[Responsive Patterns]
+    D --> D2[Accessibility Patterns]
+    D --> D3[Dark Mode Patterns]
+```
+
+### Design Tokens
+
+Design tokens are the atomic values that form the foundation of the design system. They are implemented as TypeScript constants with strict type definitions using the `as const satisfies` pattern for type safety.
+
+#### Color System
+
+The color system includes brand colors, grayscale, and functional colors:
+
+```typescript
+// Example of color tokens implementation
+export const colors = {
+  // Brand colors
+  primary: {
+    50: '#e6f1ff',
+    100: '#cce3ff',
+    200: '#99c7ff',
+    300: '#66abff',
+    400: '#338fff',
+    500: '#0073ff', // Main color
+    600: '#005cd9',
+    700: '#0044b3',
+    800: '#002d8c',
+    900: '#001766',
+  },
+  // Grayscale
+  neutral: {
+    50: '#f9fafb',
+    100: '#f3f4f6',
+    200: '#e5e7eb',
+    300: '#d1d5db',
+    400: '#9ca3af',
+    500: '#6b7280',
+    600: '#4b5563',
+    700: '#374151',
+    800: '#1f2937',
+    900: '#111827',
+  },
+  // Functional colors
+  success: {
+    light: '#d1fae5',
+    DEFAULT: '#10b981',
+    dark: '#065f46',
+  },
+  warning: {
+    light: '#fef3c7',
+    DEFAULT: '#f59e0b',
+    dark: '#92400e',
+  },
+  error: {
+    light: '#fee2e2',
+    DEFAULT: '#ef4444',
+    dark: '#b91c1c',
+  },
+  info: {
+    light: '#dbeafe',
+    DEFAULT: '#3b82f6',
+    dark: '#1e40af',
+  },
+} as const satisfies ColorPalette;
+```
+
+#### Typography System
+
+The typography system defines font families, sizes, weights, line heights, and letter spacing:
+
+```typescript
+// Example of typography tokens implementation
+export const typography = {
+  fontFamily: {
+    sans: 'var(--font-geist-sans)',
+    mono: 'var(--font-geist-mono)',
+  },
+  fontSize: {
+    xs: '0.75rem',     // 12px
+    sm: '0.875rem',    // 14px
+    base: '1rem',      // 16px
+    lg: '1.125rem',    // 18px
+    xl: '1.25rem',     // 20px
+    '2xl': '1.5rem',   // 24px
+    '3xl': '1.875rem', // 30px
+    '4xl': '2.25rem',  // 36px
+    '5xl': '3rem',     // 48px
+  },
+  lineHeight: {
+    none: '1',
+    tight: '1.25',
+    snug: '1.375',
+    normal: '1.5',
+    relaxed: '1.625',
+    loose: '2',
+  },
+  fontWeight: {
+    light: '300',
+    normal: '400',
+    medium: '500',
+    semibold: '600',
+    bold: '700',
+  },
+  letterSpacing: {
+    tighter: '-0.05em',
+    tight: '-0.025em',
+    normal: '0',
+    wide: '0.025em',
+    wider: '0.05em',
+    widest: '0.1em',
+  },
+} as const satisfies Typography;
+```
+
+#### Spacing System
+
+The spacing system provides consistent spacing values:
+
+```typescript
+// Example of spacing tokens implementation
+export const spacing = {
+  px: '1px',
+  0: '0',
+  0.5: '0.125rem', // 2px
+  1: '0.25rem',    // 4px
+  1.5: '0.375rem', // 6px
+  2: '0.5rem',     // 8px
+  2.5: '0.625rem', // 10px
+  3: '0.75rem',    // 12px
+  3.5: '0.875rem', // 14px
+  4: '1rem',       // 16px
+  5: '1.25rem',    // 20px
+  6: '1.5rem',     // 24px
+  8: '2rem',       // 32px
+  10: '2.5rem',    // 40px
+  12: '3rem',      // 48px
+  16: '4rem',      // 64px
+  20: '5rem',      // 80px
+  24: '6rem',      // 96px
+  32: '8rem',      // 128px
+} as const satisfies Spacing;
+```
+
+#### Breakpoints
+
+The breakpoints system defines screen size breakpoints for responsive design:
+
+```typescript
+// Example of breakpoints tokens implementation
+export const breakpoints = {
+  sm: '40rem',  // 640px
+  md: '48rem',  // 768px
+  lg: '64rem',  // 1024px
+  xl: '80rem',  // 1280px
+  '2xl': '96rem', // 1536px
+} as const satisfies Breakpoints;
+```
+
+#### Animation
+
+The animation system defines duration and timing functions:
+
+```typescript
+// Example of animation tokens implementation
+export const animation = {
+  duration: {
+    fast: '150ms',
+    normal: '300ms',
+    slow: '500ms',
+  },
+  timing: {
+    ease: 'cubic-bezier(0.25, 0.1, 0.25, 1)',
+    easeIn: 'cubic-bezier(0.42, 0, 1, 1)',
+    easeOut: 'cubic-bezier(0, 0, 0.58, 1)',
+    easeInOut: 'cubic-bezier(0.42, 0, 0.58, 1)',
+  },
+} as const satisfies Animation;
+```
+
+### Dark Mode Support
+
+The design system includes dark mode support with semantic color tokens:
+
+```css
+/* Example of dark mode implementation in globals.css */
+:root {
+  /* Light mode defaults */
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --color-primary: #0073ff;
+  --color-primary-foreground: #ffffff;
+  /* ... other color tokens */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark mode values */
+    --color-background: #0a0a0a;
+    --color-foreground: #ededed;
+    --color-primary: #338fff;
+    --color-primary-foreground: #ffffff;
+    /* ... other color tokens */
+  }
+}
+```
+
+### Theme Switching
+
+The design system includes a theme switching mechanism using React context:
+
+```typescript
+// Example of theme switching implementation
+'use client'
+
+import { useEffect, useState } from 'react'
+import { Theme } from '@/types/theme'
+
+export function useTheme() {
+  const [theme, setTheme] = useState<Theme>('system')
+
+  useEffect(() => {
+    // Load theme from localStorage
+    const savedTheme = localStorage.getItem('theme') as Theme | null
+    if (savedTheme) {
+      setTheme(savedTheme)
+      applyTheme(savedTheme)
+    }
+  }, [])
+
+  const applyTheme = (newTheme: Theme) => {
+    const root = document.documentElement
+    root.classList.remove('light', 'dark')
+
+    if (newTheme === 'system') {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      root.classList.add(systemTheme)
+    } else {
+      root.classList.add(newTheme)
+    }
+  }
+
+  const setThemeAndSave = (newTheme: Theme) => {
+    setTheme(newTheme)
+    localStorage.setItem('theme', newTheme)
+    applyTheme(newTheme)
+  }
+
+  return { theme, setTheme: setThemeAndSave }
+}
+```
+
+### Accessibility Support
+
+The design system includes accessibility features:
+
+```css
+/* Example of accessibility styles in globals.css */
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-to-content:focus {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  z-index: 9999;
+  border: 2px solid var(--color-primary);
+}
+
+/* Ensure touch targets are large enough */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+```
+
 ## Next.js Component Model
 
 Next.js App Router supports both React Server Components and Client Components. Combining these appropriately optimizes both performance and interactivity.

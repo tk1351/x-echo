@@ -59,7 +59,10 @@ body {
 }
 
 /* Base styles for form elements */
-input, textarea, select, button {
+input,
+textarea,
+select,
+button {
   font-family: var(--font-sans);
 }
 

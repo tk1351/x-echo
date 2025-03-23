@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { Theme } from '@/types/theme'
+import type { Theme } from "@/types/theme";
+import { useEffect, useState } from "react";
 
 /**
  * テーマを管理するカスタムフック
@@ -9,44 +9,47 @@ import { Theme } from '@/types/theme'
  * @returns テーマの状態と切り替え関数を含むオブジェクト
  */
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>('system')
+  const [theme, setTheme] = useState<Theme>("system");
 
   useEffect(() => {
     // クライアントサイドでのみ実行
-    if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('theme') as Theme | null
+    if (typeof window !== "undefined") {
+      const savedTheme = localStorage.getItem("theme") as Theme | null;
       if (savedTheme) {
-        setTheme(savedTheme)
-        applyTheme(savedTheme)
+        setTheme(savedTheme);
+        applyTheme(savedTheme);
       }
     }
-  }, [])
+  }, []);
 
   /**
    * テーマを適用する関数
    * @param newTheme 適用するテーマ
    */
   const applyTheme = (newTheme: Theme) => {
-    const root = document.documentElement
-    root.classList.remove('light', 'dark')
+    const root = document.documentElement;
+    root.classList.remove("light", "dark");
 
-    if (newTheme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-      root.classList.add(systemTheme)
+    if (newTheme === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
+        : "light";
+      root.classList.add(systemTheme);
     } else {
-      root.classList.add(newTheme)
+      root.classList.add(newTheme);
     }
-  }
+  };
 
   /**
    * テーマを設定し、ローカルストレージに保存する関数
    * @param newTheme 設定するテーマ
    */
   const setThemeAndSave = (newTheme: Theme) => {
-    setTheme(newTheme)
-    localStorage.setItem('theme', newTheme)
-    applyTheme(newTheme)
-  }
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    applyTheme(newTheme);
+  };
 
-  return { theme, setTheme: setThemeAndSave }
+  return { theme, setTheme: setThemeAndSave };
 }

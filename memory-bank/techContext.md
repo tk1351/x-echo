@@ -23,6 +23,27 @@
 - **Testing**: Vitest + React Testing Library - Consistent with backend
 - **Linting/Formatting**: Biome - Same as backend for consistency
 
+### Next.js Component Model
+
+Next.js App Router supports both React Server Components and Client Components:
+
+#### Server Components
+- All components are Server Components by default
+- Rendered on the server and HTML is sent to the client
+- Ideal for data fetching, accessing backend resources, and keeping sensitive information
+- Reduces client-side JavaScript bundle size
+
+#### Client Components
+- Specified by adding the 'use client' directive at the top of the file
+- Hydrated on the client to provide interactive functionality
+- Used for features that depend on state, effects, or browser APIs
+
+#### Optimal Usage Patterns
+- Perform data fetching and server-side processing in Server Components
+- Implement interactive UI in Client Components
+- Place Client Components lower in the component tree and only render necessary parts on the client
+- Pass Server Components as children to Client Components to leverage benefits of both
+
 ## Development Environment
 
 ### Prerequisites

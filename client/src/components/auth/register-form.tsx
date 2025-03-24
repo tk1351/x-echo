@@ -1,6 +1,6 @@
 "use client";
-import { registerSchema } from "@/validations/auth";
 import type { RegisterFormData } from "@/validations/auth";
+import { registerSchema } from "@/validations/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -111,7 +111,7 @@ export function RegisterForm({
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full py-2 px-4 bg-primary-500 text-white rounded-md hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50"
+        className="w-full py-2 px-4 bg-primary-500 text-white rounded-md hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 hover:cursor-pointer border border-white"
       >
         {isSubmitting ? "Processing..." : "登録"}
       </button>

@@ -42,14 +42,19 @@ export default function RootLayout({
           </header>
 
           {/* Main content */}
-          <main id="main-content" className="flex-grow container mx-auto px-4 py-6">
+          <main
+            id="main-content"
+            className="flex-grow container mx-auto px-4 py-6"
+          >
             {children}
           </main>
 
           {/* Footer */}
           <footer className="border-t border-color-border py-6">
             <div className="container mx-auto px-4">
-              <p>&copy; {new Date().getFullYear()} X-Echo. All rights reserved.</p>
+              <p>
+                &copy; {new Date().getFullYear()} X-Echo. All rights reserved.
+              </p>
             </div>
           </footer>
         </ThemeProvider>

@@ -24,19 +24,27 @@ X-Echo is a clone of Twitter (now X). Users can create accounts, log in, and pos
   - PostgreSQL (Database)
   - Docker (Containerization)
 - **Frontend** (client directory)
-  - To be implemented in the future
+  - Next.js (React framework with SSR)
+  - TypeScript
+  - Tailwind CSS
+  - SWR (Data fetching)
+  - Zustand (State management)
+  - Vitest (Testing)
 
 ## Architecture
 - PostgreSQL container as the database
 - Prisma for database connection
 - Backend API built with Hono
-- Frontend will send requests to the backend API and render in the browser (future implementation)
+- Frontend built with Next.js App Router
+- Server Components for data fetching and rendering
+- Client Components for interactive elements
 
 ## Development Approach
 - Functional approach prioritized
 - Test-Driven Development (TDD)
 - Domain-Driven Design (DDD) principles
-- Adherence to standard rules of Biome, ESLint, Prettier
+- Adherence to standard rules of Biome
+- Accessibility-first design
 
 ## Project Goals
 1. Reproduce the main features of Twitter
@@ -44,7 +52,10 @@ X-Echo is a clone of Twitter (now X). Users can create accounts, log in, and pos
 3. Implement a secure authentication system
 4. Optimize performance
 5. Design for future feature extensions
+6. Ensure accessibility compliance
 
 ## How to Launch
 1. Run `npm run dev` in the api directory
-2. Access http://localhost:8080
+2. Access the API at http://localhost:8080
+3. Run `npm run dev` in the client directory
+4. Access the frontend at http://localhost:3000

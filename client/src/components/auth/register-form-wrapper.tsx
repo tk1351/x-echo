@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { RegisterForm } from "./register-form";
 import type { RegisterFormData } from "@/validations/auth";
 import { useState } from "react";
+import { RegisterForm } from "./register-form";
 
 export function RegisterFormWrapper() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,7 +30,7 @@ export function RegisterFormWrapper() {
       //   setError(errorData.message || 'Registration failed');
       // }
     } catch (err) {
-      setError('An error occurred. Please try again later.');
+      setError("An error occurred. Please try again later.");
       console.error(err);
     } finally {
       setIsSubmitting(false);
@@ -40,7 +40,10 @@ export function RegisterFormWrapper() {
   return (
     <>
       {error && (
-        <div className="bg-error-100 border border-error-300 text-error-700 px-4 py-3 rounded mb-4" role="alert">
+        <div
+          className="bg-error-100 border border-error-300 text-error-700 px-4 py-3 rounded mb-4"
+          role="alert"
+        >
           {error}
         </div>
       )}

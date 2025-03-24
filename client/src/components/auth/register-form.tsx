@@ -9,7 +9,10 @@ interface RegisterFormProps {
   isSubmitting?: boolean;
 }
 
-export function RegisterForm({ onSubmit, isSubmitting: externalIsSubmitting }: RegisterFormProps) {
+export function RegisterForm({
+  onSubmit,
+  isSubmitting: externalIsSubmitting,
+}: RegisterFormProps) {
   const {
     register,
     handleSubmit,

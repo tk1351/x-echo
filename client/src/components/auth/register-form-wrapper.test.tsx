@@ -24,17 +24,17 @@ describe("RegisterFormWrapper", () => {
 
     await user.type(
       screen.getByRole("textbox", { name: /ユーザー名/i }),
-      "testuser"
+      "testuser",
     );
 
     await user.type(
       screen.getByRole("textbox", { name: /表示名/i }),
-      "Test User"
+      "Test User",
     );
 
     await user.type(
       screen.getByRole("textbox", { name: /メールアドレス/i }),
-      "test@example.com"
+      "test@example.com",
     );
 
     await user.type(screen.getByLabelText(/パスワード/i), "password123");
@@ -47,13 +47,15 @@ describe("RegisterFormWrapper", () => {
       username: "testuser",
       displayName: "Test User",
       email: "test@example.com",
-      password: "password123"
+      password: "password123",
     });
   });
 
   it("shows error message when submission fails", async () => {
     // Mock console.error to throw an error
-    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
     const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {
       throw new Error("Test error");
     });
@@ -62,17 +64,17 @@ describe("RegisterFormWrapper", () => {
 
     await user.type(
       screen.getByRole("textbox", { name: /ユーザー名/i }),
-      "testuser"
+      "testuser",
     );
 
     await user.type(
       screen.getByRole("textbox", { name: /表示名/i }),
-      "Test User"
+      "Test User",
     );
 
     await user.type(
       screen.getByRole("textbox", { name: /メールアドレス/i }),
-      "test@example.com"
+      "test@example.com",
     );
 
     await user.type(screen.getByLabelText(/パスワード/i), "password123");
@@ -82,7 +84,7 @@ describe("RegisterFormWrapper", () => {
 
     // Verify error message is displayed
     expect(screen.getByRole("alert")).toHaveTextContent(
-      "An error occurred. Please try again later."
+      "An error occurred. Please try again later.",
     );
 
     // Restore mocks

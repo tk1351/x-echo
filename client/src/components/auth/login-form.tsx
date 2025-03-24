@@ -9,7 +9,10 @@ interface LoginFormProps {
   isSubmitting?: boolean;
 }
 
-export function LoginForm({ onSubmit, isSubmitting: externalIsSubmitting }: LoginFormProps) {
+export function LoginForm({
+  onSubmit,
+  isSubmitting: externalIsSubmitting,
+}: LoginFormProps) {
   const {
     register,
     handleSubmit,

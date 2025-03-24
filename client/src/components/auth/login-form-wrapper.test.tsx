@@ -24,7 +24,7 @@ describe("LoginFormWrapper", () => {
 
     await user.type(
       screen.getByRole("textbox", { name: /ユーザー名またはメールアドレス/i }),
-      "testuser"
+      "testuser",
     );
 
     await user.type(screen.getByLabelText(/パスワード/i), "password123");
@@ -35,13 +35,15 @@ describe("LoginFormWrapper", () => {
     // Verify console.log was called with the form data
     expect(consoleSpy).toHaveBeenCalledWith("Form submitted:", {
       identifier: "testuser",
-      password: "password123"
+      password: "password123",
     });
   });
 
   it("shows error message when submission fails", async () => {
     // Mock console.error to throw an error
-    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
     const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {
       throw new Error("Test error");
     });
@@ -50,7 +52,7 @@ describe("LoginFormWrapper", () => {
 
     await user.type(
       screen.getByRole("textbox", { name: /ユーザー名またはメールアドレス/i }),
-      "testuser"
+      "testuser",
     );
 
     await user.type(screen.getByLabelText(/パスワード/i), "password123");
@@ -60,7 +62,7 @@ describe("LoginFormWrapper", () => {
 
     // Verify error message is displayed
     expect(screen.getByRole("alert")).toHaveTextContent(
-      "An error occurred. Please try again later."
+      "An error occurred. Please try again later.",
     );
 
     // Restore mocks

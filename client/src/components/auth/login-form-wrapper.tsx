@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { LoginForm } from "./login-form";
 import type { LoginFormData } from "@/validations/auth";
 import { useState } from "react";
+import { LoginForm } from "./login-form";
 
 export function LoginFormWrapper() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,7 +30,7 @@ export function LoginFormWrapper() {
       //   setError(errorData.message || 'Authentication failed');
       // }
     } catch (err) {
-      setError('An error occurred. Please try again later.');
+      setError("An error occurred. Please try again later.");
       console.error(err);
     } finally {
       setIsSubmitting(false);
@@ -40,7 +40,10 @@ export function LoginFormWrapper() {
   return (
     <>
       {error && (
-        <div className="bg-error-100 border border-error-300 text-error-700 px-4 py-3 rounded mb-4" role="alert">
+        <div
+          className="bg-error-100 border border-error-300 text-error-700 px-4 py-3 rounded mb-4"
+          role="alert"
+        >
           {error}
         </div>
       )}

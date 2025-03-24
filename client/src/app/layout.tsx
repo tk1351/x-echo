@@ -26,9 +26,33 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {/* Skip link for accessibility */}
+          <a href="#main-content" className="skip-to-content">
+            Skip to content
+          </a>
+
+          {/* Header */}
+          <header className="border-b border-color-border py-4">
+            <div className="container mx-auto px-4">
+              <h1 className="text-xl font-bold">X-Echo</h1>
+            </div>
+          </header>
+
+          {/* Main content */}
+          <main id="main-content" className="flex-grow container mx-auto px-4 py-6">
+            {children}
+          </main>
+
+          {/* Footer */}
+          <footer className="border-t border-color-border py-6">
+            <div className="container mx-auto px-4">
+              <p>&copy; {new Date().getFullYear()} X-Echo. All rights reserved.</p>
+            </div>
+          </footer>
+        </ThemeProvider>
       </body>
     </html>
   );

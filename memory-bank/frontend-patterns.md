@@ -416,10 +416,70 @@ export default function Layout({ children }) {
 }
 ```
 
+### 5. Client Component Wrapper Pattern
+
+When you need to handle events in a form but want to keep the page as a Server Component, use the Client Component Wrapper pattern:
+
+```tsx
+// form-wrapper.tsx (Client Component)
+'use client'
+import { useState } from 'react'
+import { Form } from './form'
+import type { FormData } from '@/types'
+
+export function FormWrapper() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = async (data: FormData) => {
+    try {
+      setIsSubmitting(true)
+      setError(null)
+
+      // Handle form submission
+      console.log('Form submitted:', data)
+
+      // API call would go here
+      // const response = await fetch('/api/endpoint', {...})
+
+    } catch (err) {
+      setError('An error occurred')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  return (
+    <>
+      {error && <div className="error">{error}</div>}
+      <Form onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+    </>
+  )
+}
+
+// page.tsx (Server Component)
+import { FormWrapper } from './form-wrapper'
+
+export default function Page() {
+  return (
+    <div>
+      <h1>Form Page</h1>
+      <FormWrapper />
+    </div>
+  )
+}
+```
+
+This pattern solves the "Event handlers cannot be passed to Client Component props" error by:
+1. Keeping the page as a Server Component
+2. Moving event handling logic to a Client Component wrapper
+3. Using the wrapper in the Server Component instead of directly using the form
+
 ## X-Echo Project Specific Implementation Plan
 
 ### Authentication Flow
 - Login form: Client Component (for form state management)
+- Login form wrapper: Client Component (for handling form submission)
 - Authentication state management: Client Component + Context Provider
 - User information display: Server Component
 

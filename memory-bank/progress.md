@@ -70,6 +70,10 @@ The X-Echo project is in the early development phase, with the focus on establis
 - ✅ Skip-to-content link for accessibility
 - ✅ Responsive design using Tailwind CSS
 - ✅ Layout component tests using TDD approach
+- ✅ Login form component with validation
+- ✅ Registration form component with validation
+- ✅ Form validation using Zod and react-hook-form
+- ✅ Login and registration pages
 
 ### Testing
 - ✅ Testing infrastructure set up with Vitest
@@ -87,6 +91,8 @@ The X-Echo project is in the early development phase, with the focus on establis
 - ✅ Unit tests for tweet service implemented
 - ✅ Unit tests for tweet controller implemented
 - ✅ Unit tests for layout components implemented
+- ✅ Unit tests for login form component implemented
+- ✅ Unit tests for registration form component implemented
 
 ### Documentation
 - ✅ Database architecture documentation
@@ -108,8 +114,8 @@ The X-Echo project is in the early development phase, with the focus on establis
 ### Frontend Development
 - ✅ Design system implementation
 - ✅ Basic layout structure implementation
+- ✅ Authentication UI implementation
 - UI component library based on design system
-- Authentication UI implementation
 - User profile page implementation
 
 ## What's Left to Build
@@ -193,8 +199,8 @@ The X-Echo project is in the early development phase, with the focus on establis
 ### Milestone 3: Frontend Foundation (In Progress)
 - ✅ Design system implementation
 - ✅ Basic layout structure
+- ✅ Authentication UI
 - UI component library
-- Authentication UI
 - User profile pages
 
 **Target Completion**: TBD

@@ -6,13 +6,14 @@ import { useForm } from "react-hook-form";
 
 interface LoginFormProps {
   onSubmit: (data: LoginFormData) => void;
+  isSubmitting?: boolean;
 }
 
-export function LoginForm({ onSubmit }: LoginFormProps) {
+export function LoginForm({ onSubmit, isSubmitting: externalIsSubmitting }: LoginFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting: formIsSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -20,6 +21,9 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
       password: "",
     },
   });
+
+  // Combine external and form isSubmitting states
+  const isSubmitting = externalIsSubmitting || formIsSubmitting;
 
   return (
     <form
@@ -68,7 +72,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         disabled={isSubmitting}
         className="w-full py-2 px-4 bg-primary-500 text-white rounded-md hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50"
       >
-        ログイン
+        {isSubmitting ? "Processing..." : "ログイン"}
       </button>
     </form>
   );

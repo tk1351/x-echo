@@ -6,13 +6,14 @@ import { useForm } from "react-hook-form";
 
 interface RegisterFormProps {
   onSubmit: (data: RegisterFormData) => void;
+  isSubmitting?: boolean;
 }
 
-export function RegisterForm({ onSubmit }: RegisterFormProps) {
+export function RegisterForm({ onSubmit, isSubmitting: externalIsSubmitting }: RegisterFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting: formIsSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -22,6 +23,9 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
       password: "",
     },
   });
+
+  // Combine external and form isSubmitting states
+  const isSubmitting = externalIsSubmitting || formIsSubmitting;
 
   return (
     <form
@@ -106,7 +110,7 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
         disabled={isSubmitting}
         className="w-full py-2 px-4 bg-primary-500 text-white rounded-md hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50"
       >
-        登録
+        {isSubmitting ? "Processing..." : "登録"}
       </button>
     </form>
   );

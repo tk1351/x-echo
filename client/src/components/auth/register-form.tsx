@@ -1,8 +1,8 @@
-'use client'
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { registerSchema } from '@/validations/auth';
-import type { RegisterFormData } from '@/validations/auth';
+"use client";
+import { registerSchema } from "@/validations/auth";
+import type { RegisterFormData } from "@/validations/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 interface RegisterFormProps {
   onSubmit: (data: RegisterFormData) => void;
@@ -16,10 +16,10 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      username: '',
-      displayName: '',
-      email: '',
-      password: '',
+      username: "",
+      displayName: "",
+      email: "",
+      password: "",
     },
   });
 
@@ -30,17 +30,14 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
       className="space-y-4"
     >
       <div className="space-y-2">
-        <label
-          htmlFor="username"
-          className="block text-sm font-medium"
-        >
+        <label htmlFor="username" className="block text-sm font-medium">
           ユーザー名
         </label>
         <input
           id="username"
           type="text"
           className="w-full px-3 py-2 border rounded-md"
-          {...register('username')}
+          {...register("username")}
           aria-invalid={errors.username ? "true" : "false"}
         />
         {errors.username && (
@@ -51,17 +48,14 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
       </div>
 
       <div className="space-y-2">
-        <label
-          htmlFor="displayName"
-          className="block text-sm font-medium"
-        >
+        <label htmlFor="displayName" className="block text-sm font-medium">
           表示名
         </label>
         <input
           id="displayName"
           type="text"
           className="w-full px-3 py-2 border rounded-md"
-          {...register('displayName')}
+          {...register("displayName")}
           aria-invalid={errors.displayName ? "true" : "false"}
         />
         {errors.displayName && (
@@ -72,17 +66,14 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
       </div>
 
       <div className="space-y-2">
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium"
-        >
+        <label htmlFor="email" className="block text-sm font-medium">
           メールアドレス
         </label>
         <input
           id="email"
           type="email"
           className="w-full px-3 py-2 border rounded-md"
-          {...register('email')}
+          {...register("email")}
           aria-invalid={errors.email ? "true" : "false"}
         />
         {errors.email && (
@@ -93,17 +84,14 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
       </div>
 
       <div className="space-y-2">
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium"
-        >
+        <label htmlFor="password" className="block text-sm font-medium">
           パスワード
         </label>
         <input
           id="password"
           type="password"
           className="w-full px-3 py-2 border rounded-md"
-          {...register('password')}
+          {...register("password")}
           aria-invalid={errors.password ? "true" : "false"}
         />
         {errors.password && (

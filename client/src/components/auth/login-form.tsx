@@ -1,8 +1,8 @@
-'use client'
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema } from '@/validations/auth';
-import type { LoginFormData } from '@/validations/auth';
+"use client";
+import { loginSchema } from "@/validations/auth";
+import type { LoginFormData } from "@/validations/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 interface LoginFormProps {
   onSubmit: (data: LoginFormData) => void;
@@ -16,8 +16,8 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      identifier: '',
-      password: '',
+      identifier: "",
+      password: "",
     },
   });
 
@@ -28,17 +28,14 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
       className="space-y-4"
     >
       <div className="space-y-2">
-        <label
-          htmlFor="identifier"
-          className="block text-sm font-medium"
-        >
+        <label htmlFor="identifier" className="block text-sm font-medium">
           ユーザー名またはメールアドレス
         </label>
         <input
           id="identifier"
           type="text"
           className="w-full px-3 py-2 border rounded-md"
-          {...register('identifier')}
+          {...register("identifier")}
           aria-invalid={errors.identifier ? "true" : "false"}
         />
         {errors.identifier && (
@@ -49,17 +46,14 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
       </div>
 
       <div className="space-y-2">
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium"
-        >
+        <label htmlFor="password" className="block text-sm font-medium">
           パスワード
         </label>
         <input
           id="password"
           type="password"
           className="w-full px-3 py-2 border rounded-md"
-          {...register('password')}
+          {...register("password")}
           aria-invalid={errors.password ? "true" : "false"}
         />
         {errors.password && (

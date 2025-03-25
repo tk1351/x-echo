@@ -120,7 +120,9 @@ describe("RegisterFormWrapper", () => {
     expect(apiClient.registerUser).toHaveBeenCalled();
 
     // Verify error message is displayed with the API error message
-    expect(screen.getByRole("alert")).toHaveTextContent("Username already exists");
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Username already exists",
+    );
 
     // Verify router.push was not called
     expect(pushMock).not.toHaveBeenCalled();

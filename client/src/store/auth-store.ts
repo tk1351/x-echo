@@ -1,7 +1,7 @@
+import { loginUser, logoutUser } from "@/lib/api-client";
+import type { AuthResponse, User } from "@/types/auth";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { AuthResponse, User } from "@/types/auth";
-import { loginUser, logoutUser } from "@/lib/api-client";
 
 type AuthState = {
   user: User | null;
@@ -31,7 +31,7 @@ export const useAuthStore = create<AuthState>()(
 
           const response: AuthResponse = await loginUser({
             identifier,
-            password
+            password,
           });
 
           set({
@@ -44,7 +44,8 @@ export const useAuthStore = create<AuthState>()(
         } catch (error) {
           set({
             isLoading: false,
-            error: error instanceof Error ? error.message : "ログインに失敗しました"
+            error:
+              error instanceof Error ? error.message : "ログインに失敗しました",
           });
           throw error;
         }
@@ -70,7 +71,10 @@ export const useAuthStore = create<AuthState>()(
         } catch (error) {
           set({
             isLoading: false,
-            error: error instanceof Error ? error.message : "ログアウトに失敗しました"
+            error:
+              error instanceof Error
+                ? error.message
+                : "ログアウトに失敗しました",
           });
           throw error;
         }
@@ -88,6 +92,6 @@ export const useAuthStore = create<AuthState>()(
         refreshToken: state.refreshToken,
         isAuthenticated: state.isAuthenticated,
       }),
-    }
-  )
+    },
+  ),
 );

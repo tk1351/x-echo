@@ -1,6 +1,6 @@
+import * as apiClient from "@/lib/api-client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useAuthStore } from "./auth-store";
-import * as apiClient from "@/lib/api-client";
 
 // Mock the API client functions
 vi.mock("@/lib/api-client", () => ({
@@ -107,12 +107,12 @@ describe("Auth Store", () => {
     it("ログインが失敗した場合、エラー状態が正しく設定されること", async () => {
       // Mock the loginUser function to throw an error
       vi.mocked(apiClient.loginUser).mockRejectedValue(
-        new Error("Invalid credentials")
+        new Error("Invalid credentials"),
       );
 
       // Call the login function and expect it to throw
       await expect(
-        useAuthStore.getState().login("testuser", "wrongpassword")
+        useAuthStore.getState().login("testuser", "wrongpassword"),
       ).rejects.toThrow("Invalid credentials");
 
       // Check that the state was updated correctly
@@ -202,12 +202,12 @@ describe("Auth Store", () => {
 
       // Mock the logoutUser function to throw an error
       vi.mocked(apiClient.logoutUser).mockRejectedValue(
-        new Error("Invalid token")
+        new Error("Invalid token"),
       );
 
       // Call the logout function and expect it to throw
       await expect(useAuthStore.getState().logout()).rejects.toThrow(
-        "Invalid token"
+        "Invalid token",
       );
 
       // Check that the error state was set correctly

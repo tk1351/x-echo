@@ -90,6 +90,16 @@ feature(tweets): Add tweet posting functionality
 - Provide only the created message content as the answer
 - Commands must always be executed manually by the user
 
+### 5. Regular Commit Practices
+
+- Make small, frequent commits to track changes effectively
+- Always output commit messages as text before executing git commit
+- Commit messages must be descriptive and clearly explain what changes were made
+- Include the "why" behind changes when necessary
+- Keep related changes together in a single commit
+- Separate unrelated changes into different commits
+- Review changes before committing using git diff or git status
+
 ## Pull Request Creation Conventions
 
 ### 1. Basic Rules

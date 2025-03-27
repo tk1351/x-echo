@@ -2,6 +2,7 @@ import type { PrismaClient } from "@prisma/client";
 import {
   createTweet as createTweetRepo,
   getLatestTweets as getLatestTweetsRepo,
+  getTimelineTweets as getTimelineTweetsRepo,
   getTweetById as getTweetByIdRepo,
   getTweetsByUserId,
 } from "../domain/tweet/tweetRepository.js";
@@ -261,6 +262,88 @@ export const getLatestTweets = async (
       error: {
         type: TweetErrorType.INTERNAL_ERROR,
         message: "Failed to retrieve tweets",
+      },
+    };
+  }
+};
+
+/**
+ * ユーザーのタイムラインツイート取得（フォロー中のユーザーと自分のツイート）
+ * @param userId ユーザーID
+ * @param limit 取得するツイート数
+ * @param prisma Prismaクライアントインスタンス
+ * @param cursor ページネーション用カーソル（前ページの最後のツイートのID）
+ * @returns ツイートとページネーション情報を含む結果
+ */
+export const getTimeline = async (
+  userId: number,
+  limit: number,
+  prisma: PrismaClient,
+  cursor?: number,
+): Promise<
+  Result<TweetListResponse, { type: TweetErrorType; message: string }>
+> => {
+  // limitパラメータの検証
+  if (limit <= 0 || limit > 100) {
+    return {
+      ok: false,
+      error: {
+        type: TweetErrorType.INVALID_PAGINATION_PARAMS,
+        message: "Limit must be between 1 and 100",
+      },
+    };
+  }
+
+  try {
+    // ユーザーの存在確認
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true },
+    });
+
+    if (!user) {
+      return {
+        ok: false,
+        error: {
+          type: TweetErrorType.USER_NOT_FOUND,
+          message: `User with id ${userId} not found`,
+        },
+      };
+    }
+
+    // タイムラインツイートの取得
+    const result = await getTimelineTweetsRepo(userId, limit, prisma, cursor);
+
+    if (!result.ok) {
+      return {
+        ok: false,
+        error: {
+          type: TweetErrorType.INTERNAL_ERROR,
+          message: "Failed to retrieve timeline tweets",
+        },
+      };
+    }
+
+    // レスポンスの整形
+    return {
+      ok: true,
+      value: {
+        tweets: result.value.tweets,
+        pagination: {
+          hasMore: result.value.hasMore,
+          nextCursor:
+            result.value.hasMore && result.value.tweets.length > 0
+              ? String(result.value.tweets[result.value.tweets.length - 1].id)
+              : undefined,
+        },
+      },
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      error: {
+        type: TweetErrorType.INTERNAL_ERROR,
+        message: "Failed to retrieve timeline tweets",
       },
     };
   }

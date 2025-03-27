@@ -47,6 +47,8 @@ The current development focus is on implementing the core backend functionality 
    - Added follow status checking functionality
    - Implemented follower/following list retrieval with pagination
    - Added follow-related endpoints to the API
+   - Implemented timeline functionality with all layers (repository, service, controller, route)
+   - Created pull request to merge timeline functionality to main branch
 
 4. **Code Quality Improvements**
    - Removed unnecessary `else` clauses in `authController.ts` to improve code readability
@@ -89,6 +91,7 @@ The current development focus is on implementing the core backend functionality 
    - ✅ Adding cursor-based pagination for efficient data retrieval
    - ✅ Implementing user tweets retrieval endpoint
    - ✅ Implementing latest tweets retrieval endpoint
+   - ✅ Implementing timeline functionality
 
 4. **Frontend Development**
    - ✅ Implementing design system with design tokens
@@ -139,7 +142,7 @@ The current development focus is on implementing the core backend functionality 
    - ✅ Implement tweet creation
    - ✅ Add tweet retrieval (single)
    - ✅ Add tweet retrieval (lists)
-   - Create timeline functionality
+   - ✅ Create timeline functionality
    - Implement tweet deletion
 
 2. **Interaction Features**

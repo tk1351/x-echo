@@ -4,6 +4,7 @@ import { TweetErrorType } from "../utils/errors.ts";
 import {
   createTweet,
   getLatestTweets,
+  getTimeline,
   getTweet,
   getUserTweets,
 } from "./tweetController.ts";
@@ -444,6 +445,220 @@ describe("tweetController", () => {
           error: "Invalid limit parameter. Must be between 1 and 100",
         }),
       );
+    });
+  });
+
+  describe("getTimeline", () => {
+    it("should check authentication", async () => {
+      // Arrange
+      const mockContext = {
+        get: vi.fn().mockReturnValue(null),
+        status: vi.fn().mockReturnThis(),
+        json: vi.fn().mockReturnValue("json response"),
+      } as any;
+
+      // Act
+      const response = await getTimeline(mockContext);
+
+      // Assert
+      expect(mockContext.status).toHaveBeenCalledWith(401);
+      expect(mockContext.json).toHaveBeenCalledWith({
+        error: "認証情報が不足しています",
+      });
+    });
+
+    it("should validate query parameters", async () => {
+      // Arrange
+      const mockContext = {
+        get: vi.fn().mockReturnValue({ userId: 1 }),
+        req: {
+          query: vi.fn((param) => {
+            if (param === "limit") return "-1";
+            if (param === "cursor") return "invalid";
+            return null;
+          }),
+        },
+        status: vi.fn().mockReturnThis(),
+        json: vi.fn().mockReturnValue("json response"),
+      } as any;
+
+      // Act
+      const response = await getTimeline(mockContext);
+
+      // Assert
+      expect(mockContext.status).toHaveBeenCalledWith(400);
+      expect(mockContext.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          error: expect.stringContaining("Invalid limit parameter"),
+        }),
+      );
+    });
+
+    it("should return timeline tweets when parameters are valid", async () => {
+      // Arrange
+      const mockTweets = [
+        {
+          id: 3,
+          content: "Tweet 3",
+          userId: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 2,
+          content: "Tweet 2",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ];
+      const mockResponse = {
+        tweets: mockTweets,
+        pagination: {
+          hasMore: true,
+          nextCursor: "2",
+        },
+      };
+      const mockContext = {
+        get: vi.fn().mockReturnValue({ userId: 1 }),
+        req: {
+          query: vi.fn((param) => {
+            if (param === "limit") return "10";
+            return null;
+          }),
+        },
+        status: vi.fn().mockReturnThis(),
+        json: vi.fn().mockReturnValue("json response"),
+      } as any;
+      vi.spyOn(tweetService, "getTimeline").mockResolvedValue({
+        ok: true,
+        value: mockResponse,
+      });
+
+      // Act
+      const response = await getTimeline(mockContext);
+
+      // Assert
+      expect(tweetService.getTimeline).toHaveBeenCalledWith(
+        1,
+        10,
+        expect.anything(),
+        undefined,
+      );
+      expect(mockContext.status).toHaveBeenCalledWith(200);
+      expect(mockContext.json).toHaveBeenCalledWith(mockResponse);
+    });
+
+    it("should handle cursor-based pagination", async () => {
+      // Arrange
+      const mockTweets = [
+        {
+          id: 2,
+          content: "Tweet 2",
+          userId: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 1,
+          content: "Tweet 1",
+          userId: 3,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ];
+      const mockResponse = {
+        tweets: mockTweets,
+        pagination: {
+          hasMore: false,
+          nextCursor: undefined,
+        },
+      };
+      const mockContext = {
+        get: vi.fn().mockReturnValue({ userId: 1 }),
+        req: {
+          query: vi.fn((param) => {
+            if (param === "limit") return "10";
+            if (param === "cursor") return "3";
+            return null;
+          }),
+        },
+        status: vi.fn().mockReturnThis(),
+        json: vi.fn().mockReturnValue("json response"),
+      } as any;
+      vi.spyOn(tweetService, "getTimeline").mockResolvedValue({
+        ok: true,
+        value: mockResponse,
+      });
+
+      // Act
+      const response = await getTimeline(mockContext);
+
+      // Assert
+      expect(tweetService.getTimeline).toHaveBeenCalledWith(
+        1,
+        10,
+        expect.anything(),
+        3,
+      );
+      expect(mockContext.status).toHaveBeenCalledWith(200);
+      expect(mockContext.json).toHaveBeenCalledWith(mockResponse);
+    });
+
+    it("should handle user not found error", async () => {
+      // Arrange
+      const mockContext = {
+        get: vi.fn().mockReturnValue({ userId: 999 }),
+        req: {
+          query: vi.fn().mockReturnValue(null),
+        },
+        status: vi.fn().mockReturnThis(),
+        json: vi.fn().mockReturnValue("json response"),
+      } as any;
+      vi.spyOn(tweetService, "getTimeline").mockResolvedValue({
+        ok: false,
+        error: {
+          type: TweetErrorType.USER_NOT_FOUND,
+          message: "User not found",
+        },
+      });
+
+      // Act
+      const response = await getTimeline(mockContext);
+
+      // Assert
+      expect(mockContext.status).toHaveBeenCalledWith(404);
+      expect(mockContext.json).toHaveBeenCalledWith({
+        error: "User not found",
+      });
+    });
+
+    it("should handle internal errors", async () => {
+      // Arrange
+      const mockContext = {
+        get: vi.fn().mockReturnValue({ userId: 1 }),
+        req: {
+          query: vi.fn().mockReturnValue(null),
+        },
+        status: vi.fn().mockReturnThis(),
+        json: vi.fn().mockReturnValue("json response"),
+      } as any;
+      vi.spyOn(tweetService, "getTimeline").mockResolvedValue({
+        ok: false,
+        error: {
+          type: TweetErrorType.INTERNAL_ERROR,
+          message: "Internal server error",
+        },
+      });
+
+      // Act
+      const response = await getTimeline(mockContext);
+
+      // Assert
+      expect(mockContext.status).toHaveBeenCalledWith(500);
+      expect(mockContext.json).toHaveBeenCalledWith({
+        error: "Internal server error",
+      });
     });
   });
 });

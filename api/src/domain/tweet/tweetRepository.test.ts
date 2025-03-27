@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   createTweet,
   getLatestTweets,
+  getTimelineTweets,
   getTweetById,
   getTweetsByUserId,
 } from "./tweetRepository.ts";
@@ -345,6 +346,157 @@ describe("tweetRepository", () => {
 
       // Act
       const result = await getLatestTweets(10, mockPrisma as any);
+
+      // Assert
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBe(mockError);
+      }
+    });
+  });
+
+  describe("getTimelineTweets", () => {
+    it("should retrieve timeline tweets from followed users and self", async () => {
+      // Arrange
+      const userId = 1;
+      const followingIds = [2, 3];
+      const mockFollowings = followingIds.map(followingId => ({ followingId }));
+      const mockTweets = [
+        {
+          id: 3,
+          content: "Tweet 3",
+          userId: 2,
+          createdAt: new Date("2023-01-03"),
+          updatedAt: new Date(),
+        },
+        {
+          id: 2,
+          content: "Tweet 2",
+          userId: 1,
+          createdAt: new Date("2023-01-02"),
+          updatedAt: new Date(),
+        },
+        {
+          id: 1,
+          content: "Tweet 1",
+          userId: 3,
+          createdAt: new Date("2023-01-01"),
+          updatedAt: new Date(),
+        },
+      ];
+      const mockPrisma = {
+        follow: {
+          findMany: vi.fn().mockResolvedValue(mockFollowings),
+        },
+        tweet: {
+          findMany: vi.fn().mockResolvedValue(mockTweets),
+        },
+      };
+
+      // Act
+      const result = await getTimelineTweets(userId, 2, mockPrisma as any);
+
+      // Assert
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.tweets.length).toBe(2);
+        expect(result.value.hasMore).toBe(true);
+        expect(result.value.tweets[0].id).toBe(3);
+        expect(result.value.tweets[1].id).toBe(2);
+      }
+      expect(mockPrisma.follow.findMany).toHaveBeenCalledWith({
+        where: { followerId: userId },
+        select: { followingId: true },
+      });
+      expect(mockPrisma.tweet.findMany).toHaveBeenCalledWith({
+        where: {
+          userId: { in: [...followingIds, userId] },
+        },
+        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+        take: 3,
+      });
+    });
+
+    it("should handle cursor-based pagination", async () => {
+      // Arrange
+      const userId = 1;
+      const followingIds = [2, 3];
+      const mockFollowings = followingIds.map(followingId => ({ followingId }));
+      const mockTweets = [
+        {
+          id: 2,
+          content: "Tweet 2",
+          userId: 2,
+          createdAt: new Date("2023-01-02"),
+          updatedAt: new Date(),
+        },
+        {
+          id: 1,
+          content: "Tweet 1",
+          userId: 3,
+          createdAt: new Date("2023-01-01"),
+          updatedAt: new Date(),
+        },
+      ];
+      const cursorTweet = {
+        createdAt: new Date("2023-01-03"),
+      };
+      const mockPrisma = {
+        follow: {
+          findMany: vi.fn().mockResolvedValue(mockFollowings),
+        },
+        tweet: {
+          findUnique: vi.fn().mockResolvedValue(cursorTweet),
+          findMany: vi.fn().mockResolvedValue(mockTweets),
+        },
+      };
+
+      // Act
+      const result = await getTimelineTweets(userId, 2, mockPrisma as any, 3);
+
+      // Assert
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.tweets.length).toBe(2);
+        expect(result.value.hasMore).toBe(false);
+      }
+      expect(mockPrisma.follow.findMany).toHaveBeenCalledWith({
+        where: { followerId: userId },
+        select: { followingId: true },
+      });
+      expect(mockPrisma.tweet.findUnique).toHaveBeenCalledWith({
+        where: { id: 3 },
+        select: { createdAt: true },
+      });
+      expect(mockPrisma.tweet.findMany).toHaveBeenCalledWith({
+        where: {
+          userId: { in: [...followingIds, userId] },
+          OR: [
+            { createdAt: { lt: cursorTweet.createdAt } },
+            {
+              AND: [
+                { createdAt: { equals: cursorTweet.createdAt } },
+                { id: { lt: 3 } },
+              ],
+            },
+          ],
+        },
+        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+        take: 3,
+      });
+    });
+
+    it("should return error when database query fails", async () => {
+      // Arrange
+      const mockError = new Error("Database error");
+      const mockPrisma = {
+        follow: {
+          findMany: vi.fn().mockRejectedValue(mockError),
+        },
+      };
+
+      // Act
+      const result = await getTimelineTweets(1, 10, mockPrisma as any);
 
       // Assert
       expect(result.ok).toBe(false);

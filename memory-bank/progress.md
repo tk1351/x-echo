@@ -126,7 +126,7 @@ The X-Echo project is in the early development phase, with the focus on establis
 - ✅ Tweet creation
 - ✅ Tweet retrieval (single)
 - ✅ Tweet retrieval (lists)
-- ❌ Timeline functionality
+- ✅ Timeline functionality
 - ❌ Tweet deletion
 
 ### Social Interactions
@@ -185,7 +185,7 @@ The X-Echo project is in the early development phase, with the focus on establis
 - ✅ Tweet creation
 - ✅ Tweet retrieval (single)
 - ✅ Tweet retrieval (lists)
-- Timeline implementation
+- ✅ Timeline implementation
 - Tweet interactions (favorites, retweets)
 
 **Target Completion**: TBD

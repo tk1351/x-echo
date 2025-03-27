@@ -4,6 +4,7 @@ import { TweetErrorType } from "../utils/errors.ts";
 import {
   createTweet,
   getLatestTweets,
+  getTimeline,
   getTweetById,
   getTweetsByUsername,
 } from "./tweetService.ts";
@@ -399,6 +400,173 @@ describe("tweetService", () => {
       if (!result.ok) {
         expect(result.error.type).toBe(TweetErrorType.INTERNAL_ERROR);
         expect(result.error.message).toBe("Failed to retrieve tweets");
+      }
+    });
+  });
+
+  describe("getTimeline", () => {
+    it("should validate limit parameter", async () => {
+      // Arrange
+      const mockPrisma = {} as any;
+
+      // Act
+      const tooSmallResult = await getTimeline(1, 0, mockPrisma);
+      const tooLargeResult = await getTimeline(1, 101, mockPrisma);
+
+      // Assert
+      expect(tooSmallResult.ok).toBe(false);
+      expect(tooLargeResult.ok).toBe(false);
+      if (!tooSmallResult.ok && !tooLargeResult.ok) {
+        expect(tooSmallResult.error.type).toBe(
+          TweetErrorType.INVALID_PAGINATION_PARAMS,
+        );
+        expect(tooLargeResult.error.type).toBe(
+          TweetErrorType.INVALID_PAGINATION_PARAMS,
+        );
+      }
+    });
+
+    it("should check if user exists", async () => {
+      // Arrange
+      const mockPrisma = {
+        user: {
+          findUnique: vi.fn().mockResolvedValue(null),
+        },
+      } as any;
+
+      // Act
+      const result = await getTimeline(999, 10, mockPrisma);
+
+      // Assert
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.type).toBe(TweetErrorType.USER_NOT_FOUND);
+        expect(result.error.message).toBe("User with id 999 not found");
+      }
+      expect(mockPrisma.user.findUnique).toHaveBeenCalledWith({
+        where: { id: 999 },
+        select: { id: true },
+      });
+    });
+
+    it("should retrieve timeline tweets successfully", async () => {
+      // Arrange
+      const mockPrisma = {
+        user: {
+          findUnique: vi.fn().mockResolvedValue({ id: 1 }),
+        },
+      } as any;
+      const mockTweets = [
+        {
+          id: 3,
+          content: "Tweet 3",
+          userId: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 2,
+          content: "Tweet 2",
+          userId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ];
+      vi.spyOn(tweetRepository, "getTimelineTweets").mockResolvedValue({
+        ok: true,
+        value: {
+          tweets: mockTweets,
+          hasMore: true,
+        },
+      });
+
+      // Act
+      const result = await getTimeline(1, 10, mockPrisma);
+
+      // Assert
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.tweets).toEqual(mockTweets);
+        expect(result.value.pagination.hasMore).toBe(true);
+        expect(result.value.pagination.nextCursor).toBe("2");
+      }
+      expect(tweetRepository.getTimelineTweets).toHaveBeenCalledWith(
+        1,
+        10,
+        mockPrisma,
+        undefined,
+      );
+    });
+
+    it("should handle cursor-based pagination", async () => {
+      // Arrange
+      const mockPrisma = {
+        user: {
+          findUnique: vi.fn().mockResolvedValue({ id: 1 }),
+        },
+      } as any;
+      const mockTweets = [
+        {
+          id: 2,
+          content: "Tweet 2",
+          userId: 2,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: 1,
+          content: "Tweet 1",
+          userId: 3,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ];
+      vi.spyOn(tweetRepository, "getTimelineTweets").mockResolvedValue({
+        ok: true,
+        value: {
+          tweets: mockTweets,
+          hasMore: false,
+        },
+      });
+
+      // Act
+      const result = await getTimeline(1, 10, mockPrisma, 3);
+
+      // Assert
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.tweets).toEqual(mockTweets);
+        expect(result.value.pagination.hasMore).toBe(false);
+        expect(result.value.pagination.nextCursor).toBeUndefined();
+      }
+      expect(tweetRepository.getTimelineTweets).toHaveBeenCalledWith(
+        1,
+        10,
+        mockPrisma,
+        3,
+      );
+    });
+
+    it("should handle repository errors", async () => {
+      // Arrange
+      const mockPrisma = {
+        user: {
+          findUnique: vi.fn().mockResolvedValue({ id: 1 }),
+        },
+      } as any;
+      vi.spyOn(tweetRepository, "getTimelineTweets").mockResolvedValue({
+        ok: false,
+        error: new Error("Repository error"),
+      });
+
+      // Act
+      const result = await getTimeline(1, 10, mockPrisma);
+
+      // Assert
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error.type).toBe(TweetErrorType.INTERNAL_ERROR);
+        expect(result.error.message).toBe("Failed to retrieve timeline tweets");
       }
     });
   });

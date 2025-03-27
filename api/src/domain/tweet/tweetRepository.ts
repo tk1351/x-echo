@@ -128,3 +128,82 @@ export const getLatestTweets = async (
     return { ok: false, error: error as Error };
   }
 };
+
+/**
+ * ユーザーのタイムラインツイート取得（フォロー中のユーザーのツイート）
+ * @param userId ユーザーID
+ * @param limit 取得するツイート数
+ * @param prisma Prismaクライアントインスタンス
+ * @param cursor ページネーション用カーソル（前ページの最後のツイートのID）
+ * @returns ツイートとhasMoreフラグを含む結果
+ */
+export const getTimelineTweets = async (
+  userId: number,
+  limit: number,
+  prisma: PrismaClient,
+  cursor?: number,
+): Promise<Result<{ tweets: TweetResponse[]; hasMore: boolean }, Error>> => {
+  try {
+    // フォロー中のユーザーIDを取得
+    const followings = await prisma.follow.findMany({
+      where: { followerId: userId },
+      select: { followingId: true },
+    });
+
+    const followingIds = followings.map((follow) => follow.followingId);
+
+    // 自分自身のツイートも含める
+    followingIds.push(userId);
+
+    // カーソルベースのページネーション条件を構築
+    let cursorCondition = {};
+    if (cursor) {
+      const cursorTweet = await prisma.tweet.findUnique({
+        where: { id: cursor },
+        select: { createdAt: true },
+      });
+
+      if (cursorTweet) {
+        cursorCondition = {
+          OR: [
+            { createdAt: { lt: cursorTweet.createdAt } },
+            {
+              AND: [
+                { createdAt: { equals: cursorTweet.createdAt } },
+                { id: { lt: cursor } },
+              ],
+            },
+          ],
+        };
+      }
+    }
+
+    // フォロー中のユーザーのツイートを取得
+    const tweets = await prisma.tweet.findMany({
+      where: {
+        userId: { in: followingIds },
+        ...cursorCondition,
+      },
+      orderBy: [
+        { createdAt: "desc" },
+        { id: "desc" }, // 一貫した順序付けのためにIDによる二次ソート
+      ],
+      take: limit + 1,
+    });
+
+    // さらにツイートがあるかどうかを判断
+    const hasMore = tweets.length > limit;
+    // hasMoreがtrueの場合、余分なツイートを削除
+    const resultTweets = hasMore ? tweets.slice(0, limit) : tweets;
+
+    return {
+      ok: true,
+      value: {
+        tweets: resultTweets,
+        hasMore,
+      },
+    };
+  } catch (error) {
+    return { ok: false, error: error as Error };
+  }
+};

@@ -4,6 +4,7 @@ import prisma from "../lib/prisma.js";
 import {
   createTweet as createTweetService,
   getLatestTweets as getLatestTweetsService,
+  getTimeline as getTimelineService,
   getTweetById,
   getTweetsByUsername,
 } from "../services/tweetService.js";
@@ -206,6 +207,75 @@ export const getLatestTweets = async (c: Context) => {
 
   if (!result.ok) {
     switch (result.error.type) {
+      case TweetErrorType.INVALID_PAGINATION_PARAMS:
+        c.status(400);
+        return c.json({ error: result.error.message });
+      default:
+        c.status(500);
+        return c.json({ error: result.error.message });
+    }
+  }
+
+  c.status(200);
+  return c.json(result.value);
+};
+
+/**
+ * Controller to retrieve timeline tweets (tweets from followed users and self)
+ * @param c Hono context
+ * @returns JSON response
+ */
+export const getTimeline = async (c: Context) => {
+  // Get user ID from JWT payload set by authentication middleware
+  const jwtPayload = c.get("jwtPayload");
+  if (!jwtPayload || !jwtPayload.userId) {
+    c.status(401);
+    return c.json({ error: "認証情報が不足しています" });
+  }
+
+  // Get limit and cursor from query parameters
+  const limitParam = c.req.query("limit");
+  const cursorParam = c.req.query("cursor");
+
+  // Parse limit (default: 20)
+  const limit = limitParam ? Number.parseInt(limitParam, 10) : 20;
+  // Parse cursor (明示的に型を定義)
+  const cursor: number | undefined = cursorParam
+    ? Number.parseInt(cursorParam, 10)
+    : undefined;
+
+  // Validate limit
+  if (Number.isNaN(limit) || limit <= 0 || limit > 100) {
+    c.status(400);
+    return c.json({
+      error: "Invalid limit parameter. Must be between 1 and 100",
+    });
+  }
+
+  // Validate cursor
+  if (
+    cursorParam &&
+    (Number.isNaN(cursor) || (cursor !== undefined && cursor <= 0))
+  ) {
+    c.status(400);
+    return c.json({
+      error: "Invalid cursor parameter. Must be a positive integer",
+    });
+  }
+
+  // Retrieve timeline tweets
+  const result = await getTimelineService(
+    jwtPayload.userId,
+    limit,
+    prisma,
+    cursor,
+  );
+
+  if (!result.ok) {
+    switch (result.error.type) {
+      case TweetErrorType.USER_NOT_FOUND:
+        c.status(404);
+        return c.json({ error: result.error.message });
       case TweetErrorType.INVALID_PAGINATION_PARAMS:
         c.status(400);
         return c.json({ error: result.error.message });

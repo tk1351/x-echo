@@ -3,6 +3,7 @@ import {
   createTweet,
   getLatestTweets,
   getTweet,
+  getTimeline,
 } from "../controllers/tweetController.js";
 import { authenticate } from "../middleware/authMiddleware.js";
 
@@ -16,5 +17,8 @@ tweetsRouter.get("/:id", getTweet);
 
 // Latest tweets retrieval endpoint (no authentication required)
 tweetsRouter.get("/", getLatestTweets);
+
+// Timeline endpoint (requires authentication)
+tweetsRouter.get("/timeline", authenticate, getTimeline);
 
 export default tweetsRouter;
